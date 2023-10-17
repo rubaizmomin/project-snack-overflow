@@ -1,1 +1,35 @@
-[![Review Assignment Due Date](https://classroom.github.com/assets/deadline-readme-button-24ddc0f5d75046c5622901739e7c5dd533143b0c8e959d652212380cedb1ea36.svg)](https://classroom.github.com/a/KRLE_tfD)
+# Deliverables
+
+### Project Title 
+
+VerboVerse
+
+## Team Members
+
+    - Rubaiz Momin - 1006903479
+    - Cindy Ji - 1006718223
+    - Vanshika Virmani - 1006865251
+
+## Web Application Description
+
+description here
+
+## Key Features for Beta Version
+
+    - first feature
+        - sub feature
+    
+## Additional Features for Final Version
+
+    - first feature
+        - sub feature
+
+## Technology Stack
+
+    - first
+    - second
+
+## 5 Technical Challenges
+
+    - first
+    - second
