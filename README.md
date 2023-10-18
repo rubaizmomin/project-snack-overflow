@@ -4,17 +4,19 @@
 
 VerboVerse
 
-## Team Members
+### Team Members
 
-    - Rubaiz Momin - 1006903479
-    - Cindy Ji - 1006718223
-    - Vanshika Virmani - 1006865251
+##### Rubaiz Momin - 1006903479
+##### Cindy Ji - 1006718223
+##### Vanshika Virmani - 1006865251
 
 ## Web Application Description
 
-VerboVerse is a web application that allows people of different languages to schedule meetings and the application translates each other’s languages to their respective primary language to break language barriers.
+_VerboVerse_ is an interactive web application that allows people from different cultural backgrounds and languages to communicate with each other effortlessly. The app offers users the option to create and schedule meetings with video and audio calling option. What makes this app an even more immersive experience for the users is that it serves as the platform for performing real time translation of the different languages so that people can overcome their language barriers. 
 
-## Key Features for Beta Version
+Overall, _VerboVerse_ is an innovative and user-friendly web app that offers an engaging experience for communicating more easily.
+
+### Key Features for Beta Version
 
     - Login Page:
         - Users can sign in/ create an account using Auth0
@@ -35,19 +37,19 @@ VerboVerse is a web application that allows people of different languages to sch
         - Use Google Cloud Translation API to detect the language the text is in, and translate the text to the language of the other user’s choice
         - We will display the translated text on the screen of the other user
     
-## Additional Features for Final Version
+### Additional Features for Final Version
 
     - first feature
         - sub feature
 
-## Technology Stack
+### Technology Stack
 
     - ReactJS for the Frontend
     - ExpressJS and NodeJS for Backend
     - PostgreSql for Database
     - AWS Lightsail for deploying the Application
 
-## 5 Technical Challenges
+### 5 Technical Challenges
 
     - Managing asynchronous translation when two users are having a conversation
     - Allowing users to join the same meeting using WebRTC
