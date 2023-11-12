@@ -7,9 +7,8 @@ import Transcript from './components/transcript_display/speech_to_text_display.m
 function App() {
   return (
     <div className="App">
-      <div><Video_connection /></div>
         <Routes>
-          <Route path='/video' element={<video_connection />} />
+          <Route path='' element={<Video_connection />} />
         </Routes>
       <div><Transcript /></div>
         <Routes>
