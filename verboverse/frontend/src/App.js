@@ -6,9 +6,8 @@ import Video_connection from './components/video_connection/video_connection';
 function App() {
   return (
     <div className="App">
-      <div><Video_connection /></div>
         <Routes>
-          <Route path='/video' element={<video_connection />} />
+          <Route path='' element={<Video_connection />} />
         </Routes>
     </div>
   );
