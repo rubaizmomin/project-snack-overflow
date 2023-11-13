@@ -1,7 +1,7 @@
 import logo from './logo.svg';
 import './App.css';
 import { Route, Routes } from 'react-router-dom';
-import Video_connection from './components/video_connection/video_connection';
+import Video_connection from './components/video_connection/video_connection.mjs';
 import Transcript from './components/transcript_display/speech_to_text_display.mjs';
 
 function App() {
