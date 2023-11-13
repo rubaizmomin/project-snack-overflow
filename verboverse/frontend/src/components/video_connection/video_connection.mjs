@@ -2,7 +2,14 @@ import firebase from 'firebase/compat/app';
 import React, { useState } from 'react';
 import 'firebase/compat/firestore';
 const firebaseConfig = {
-//
+  apiKey: "AIzaSyDeiAhAi21ev36X-B0z9_sN4YexK7o1VY4",
+  authDomain: "project-snack-overflow.firebaseapp.com",
+  databaseURL: "https://project-snack-overflow-default-rtdb.firebaseio.com/",
+  projectId: "project-snack-overflow",
+  storageBucket: "project-snack-overflow.appspot.com",
+  messagingSenderId: "689507442231",
+  appId: "1:689507442231:web:01a87229e518f779f5e9b2",
+  measurementId: "G-MVSPE072K6"
 };
 
 if (!firebase.apps.length) {
@@ -91,7 +98,6 @@ function Video_connection(){
       // Listen for remote ICE candidates
       answerCandidates.onSnapshot(snapshot => {
         snapshot.docChanges().forEach((change) => {
-          console.log(change);
           // check if new candidate was added and not modified.
           if (change.type === 'added') {
             const candidate = new RTCIceCandidate(change.doc.data());
