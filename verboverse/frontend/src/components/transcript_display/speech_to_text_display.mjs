@@ -9,7 +9,7 @@ var recognizing = false;
 var finalTranscript = '';
 var ignore_onend;
 var start_timestamp;
-var languageChosen = 'English';
+var languageChosen = 'en-CA';
 
 function Transcript() {
   const [info, setInfo] = useState('Off');
@@ -100,7 +100,5 @@ var first_char = /\S/;
 function capitalize(s) {
   return s.replace(first_char, function(m) { return m.toUpperCase(); });
 }
-
-// TODO: upload text to database
 
 export default Transcript;
