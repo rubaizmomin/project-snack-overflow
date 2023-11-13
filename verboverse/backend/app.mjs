@@ -1,11 +1,17 @@
-const express = require('express');
+import express from 'express';
+import mongoose from 'mongoose';
+import morgan from 'morgan';
+import bodyParser from 'body-parser';
+// require('dotenv').config();
+import 'dotenv/config';
+import cors from 'cors';
+import cookieParser from 'cookie-parser';
 const app = express();
-const mongoose = require('mongoose');
-const morgan = require('morgan');
-const bodyParser = require('body-parser');
-require('dotenv').config();
-var cors = require('cors');
-var cookieParser = require('cookie-parser');
+
+import {errorHandler} from './middleware/error.mjs';
+
+// import routes
+// import {authRoutes} from './routes/authRoutes.mjs';
 
 // DATABASE CONNECTION
 mongoose.connect(process.env.DATABASE, {
@@ -22,6 +28,12 @@ app.use(morgan('dev'));
 app.use(bodyParser.json());
 app.use(cookieParser());
 app.use(cors());
+
+// ROUTES MIDDLEWARE
+// app.use('/api', authRoutes);
+
+// ERROR HANDLER
+app.use(errorHandler);
 
 //PORT
 const port = process.env.PORT|| 9000;
