@@ -19,7 +19,6 @@ function Transcript() {
   useEffect(() => {
     recognition.onstart = function() {
       recognizing = true;
-      console.log(recognizing);
     };
     
     recognition.onerror = function(event) {
