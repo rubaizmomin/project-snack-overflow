@@ -168,4 +168,4 @@ function Video_connection(){
 
 export default Video_connection;
 
-// Reference: https://fireship.io/lessons/webrtc-firebase-video-chat/
+// Store, Fireship, director. WebRTC in 100 Seconds // Build a Video Chat App from Scratch. YouTube, 15 Mar. 2021, https://youtu.be/WmR9IMUD_CY?si=z1dGNkAm6VpOEPtd. Accessed 12 Nov. 2023. 
