@@ -1,8 +1,11 @@
-import { User } from '../models/userModel.mjs';
+import User from '../models/userModel.mjs';
 import { ErrorResponse } from '../utils/errorResponse.mjs';
 
 export async function signup (req, res, next) {
+    console.log('signup'); 
+    console.log(req.body); 
     const {email} = req.body;
+    
     const userExist = await User.findOne({email});
     if (userExist) {
         return next(new ErrorResponse('Email already exists', 400));
@@ -34,7 +37,7 @@ export async function signin (req, res, next) {
             return next(new ErrorResponse('Invalid credentials', 400));
         }
 
-        const isMatch = await user.comparePassword(password);
+        const isMatch = await User.comparePassword(password);
         if (!isMatch) {
             return next(new ErrorResponse('Invalid credentials', 400));
         }

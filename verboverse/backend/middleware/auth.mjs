@@ -1,6 +1,6 @@
 import { ErrorResponse } from '../utils/errorResponse.mjs';
 import jwt from 'jsonwebtoken';
-import {User} from '../models/User.mjs';
+import User from '../models/userModel.mjs';
 
 // check if user is authenticated
 export async function isAuthenticated (req, res, next) {
