@@ -11,7 +11,7 @@ const app = express();
 import {errorHandler} from './middleware/error.mjs';
 
 // import routes
-// import {authRoutes} from './routes/authRoutes.mjs';
+import {authRoutes} from './routes/authRoutes.mjs';
 
 // DATABASE CONNECTION
 mongoose.connect(process.env.DATABASE, {
@@ -30,7 +30,7 @@ app.use(cookieParser());
 app.use(cors());
 
 // ROUTES MIDDLEWARE
-// app.use('/api', authRoutes);
+app.use('/api', authRoutes);
 
 // ERROR HANDLER
 app.use(errorHandler);
