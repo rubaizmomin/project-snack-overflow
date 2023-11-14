@@ -37,7 +37,7 @@ export async function signin (req, res, next) {
             return next(new ErrorResponse('Invalid credentials', 400));
         }
 
-        const isMatch = await User.comparePassword(password);
+        const isMatch = await user.comparePassword(password);
         if (!isMatch) {
             return next(new ErrorResponse('Invalid credentials', 400));
         }
