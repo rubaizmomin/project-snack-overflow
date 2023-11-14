@@ -2,7 +2,7 @@ import firebase from 'firebase/compat/app';
 import React, { useState } from 'react';
 import 'firebase/compat/firestore';
 const firebaseConfig = {
-//
+  //
 };
 
 if (!firebase.apps.length) {
