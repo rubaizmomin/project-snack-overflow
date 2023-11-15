@@ -2,17 +2,15 @@ import mongoose from 'mongoose';
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 
-export const User = new mongoose.Schema({
+const userSchema = new mongoose.Schema({
     name: {
         type: String,
-        trim: true,
         required: true,
         maxlength: 32,
         minlength: 3
     },
     email: {
         type: String,
-        trim: true,
         required: true,
         unique: true,
         maxlength: 32,
@@ -29,7 +27,7 @@ export const User = new mongoose.Schema({
         minlength: 6
     },
     role: {
-        type: Number,
+        type: String,
         default: 'user'
     },
 }, {timestamps: true});
@@ -42,6 +40,11 @@ userSchema.pre('save', async function(next) {
     this.password = await bcrypt.hash(this.password, 10);
 }); 
 
+// compare password
+userSchema.methods.comparePassword = async function(password) {
+    return await bcrypt.compare(password, this.password);
+}
+
 // return a JWT token 
 userSchema.methods.getJwtToken = function() {
     return jwt.sign({id: this._id}, process.env.JWT_SECRET, {
@@ -49,4 +52,4 @@ userSchema.methods.getJwtToken = function() {
     });
 }
 
-// export default mongoose.model('User', userSchema);
+export default mongoose.models?.User || mongoose.model('User', userSchema);

@@ -1,10 +1,11 @@
 import express from 'express';
-import { signup } from '../controllers/authController.mjs';
+import { signup, signin, logout, userProfile } from '../controllers/authController.mjs';
+import { isAuthenticated } from '../middleware/auth.mjs';
 const router = express.Router();
-import sign from 'jsonwebtoken';
-import json from 'body-parser';
-
-// auth routes
-// api/signup
 
 router.post('/signup', signup);
+router.post('/signin', signin); 
+router.get('/logout', logout);
+router.get('/me', isAuthenticated, userProfile); 
+
+export const authRoutes = router;
