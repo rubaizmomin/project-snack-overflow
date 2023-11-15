@@ -1,12 +1,12 @@
-import Memcached from 'memcached';
+import Memcached from "memcached";
 
+// MEMCACHED
 const memcached = new Memcached('localhost:11211');
 
-const cacheMiddleware = (req, res, next) => {
-    const key = req.originalUrl || req.url;
+const getFromCache = (req, res, next) => {
 
     // Attempt to retrieve data from the cache
-    memcached.get(key, (err, data) => {
+    memcached.get('messages', (err, data) => {
         if (err) {
             console.error('Memcached error:', err);
             next(); // Continue to the route handler even if there's an error with Memcached
@@ -18,7 +18,17 @@ const cacheMiddleware = (req, res, next) => {
             next();
         }
     });
-};
+}
 
-export default cacheMiddleware;
+const setToCache = (data) => {
+    memcached.set('messages', data, 60, (err) => {
+        if (err) {
+            console.error('Memcached error:', err);
+        }
+    });
+}
+
+export { getFromCache, setToCache };
+
+
 

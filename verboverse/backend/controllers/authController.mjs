@@ -2,8 +2,6 @@ import User from '../models/userModel.mjs';
 import { ErrorResponse } from '../utils/errorResponse.mjs';
 
 export async function signup (req, res, next) {
-    console.log('signup'); 
-    console.log(req.body); 
     const {email} = req.body;
     
     const userExist = await User.findOne({email});
