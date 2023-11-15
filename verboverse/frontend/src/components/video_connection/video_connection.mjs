@@ -2,7 +2,7 @@ import firebase from 'firebase/compat/app';
 import React, { useState } from 'react';
 import 'firebase/compat/firestore';
 const firebaseConfig = {
-  //
+//
 };
 
 if (!firebase.apps.length) {
@@ -31,17 +31,11 @@ const muteButton = React.createRef();
 const videoButton = React.createRef();
 let localStream;
 let remoteStream;
-class Video_connection extends React.Component{
-  constructor(props) {
-    super(props);
-    this.state = {
-      mutestate: "Mute",
-      videostate: "Hide",
-      disabled: true
-    };
-  }
-
-  webcam_on = async () => {
+function Video_connection(){
+  const [mute, setmute] = useState("Mute");
+  const [video, setvideo] = useState("Hide");
+  const [disabled, setdisabled] = useState(true);
+  const webcam_on = async () => {
     //get permissions for audio and video
     localStream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
     remoteStream = new MediaStream();
@@ -60,9 +54,9 @@ class Video_connection extends React.Component{
     // replace HTML with video feedback object
     localvideo.current.srcObject = localStream;
     remotevideo.current.srcObject = remoteStream;
-    this.setState({disabled: false})
+    setdisabled( false)
   }
-  connectmeeting = async () => {
+  const connectmeeting = async () => {
     // Create a New ID for a call
     const callDoc = firestore.collection('calls').doc();
     // Create new collection
@@ -111,7 +105,7 @@ class Video_connection extends React.Component{
       });
     });
   }
-  answermeeting = async () => {
+  const answermeeting = async () => {
     // get the callID that the invitee shared and access the data
     const callId = callinput.current.value;
     const callDoc = firestore.collection('calls').doc(callId);
@@ -152,25 +146,24 @@ class Video_connection extends React.Component{
       });
     });
   }
-  togglemute = async () => {
+  const togglemute = async () => {
     if(localStream.getTracks().find(track => track.kind === 'audio').enabled){
       localStream.getTracks().find(track => track.kind === 'audio').enabled = false;
-      this.setState({mutestate: "Unmute"});
+      setmute("Unmute")
     } else {
       localStream.getTracks().find(track => track.kind === 'audio').enabled = true;
-      this.setState({mutestate: "Mute"});
+      setmute("Mute")
     }
   }
-  togglevideo = async () => {
+  const togglevideo = async () => {
     if(localStream.getTracks().find(track => track.kind === 'video').enabled){
       localStream.getTracks().find(track => track.kind === 'video').enabled = false;
-      this.setState({videostate: "Show"});
+      setvideo("Show")
     } else {
       localStream.getTracks().find(track => track.kind === 'video').enabled = true;
-      this.setState({videostate: "Hide"});
+      setvideo("Hide");
     }
   }
-  render(){
     return(
       <div>
         <span>
@@ -182,14 +175,13 @@ class Video_connection extends React.Component{
           <video ref={localvideo} autoPlay playsInline muted="muted"></video>
         </span>
         <input ref={callinput}/>
-        <button onClick={this.webcam_on}>Press</button>
-        <button ref={answerButton} onClick={this.answermeeting} disabled={this.state.disabled}>Answer</button>
-        <button ref={callButton} onClick={this.connectmeeting} disabled={this.state.disabled}>Create Call (offer)</button>
-        <button ref={muteButton} onClick={this.togglemute} disabled={this.state.disabled}>{this.state.mutestate}</button>
-        <button ref={videoButton} onClick={this.togglevideo} disabled={this.state.disabled}>{this.state.videostate}</button>
+        <button onClick={webcam_on}>Press</button>
+        <button ref={answerButton} onClick={answermeeting} disabled={disabled}>Answer</button>
+        <button ref={callButton} onClick={connectmeeting} disabled={disabled}>Create Call (offer)</button>
+        <button ref={muteButton} onClick={togglemute} disabled={disabled}>{mute}</button>
+        <button ref={videoButton} onClick={togglevideo} disabled={disabled}>{video}</button>
       </div>
     )
-  }
 }
   
   export default Video_connection;
