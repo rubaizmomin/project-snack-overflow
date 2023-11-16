@@ -1,10 +1,13 @@
-import { Link } from "react-router-dom"; 
+import { useNavigate } from "react-router-dom"; 
 import React from 'react';
 
-function Homepage() {
+const Homepage = () => {
+    const navigate = useNavigate();
     return(
     <div>
-        <Link to="/video">Start Meeting</Link>
+        <button onClick={()=>navigate('/create')}>Go To Create</button>
+        <button onClick={()=>navigate('/join')}>Go To Join</button>
+
     </div>
     );
 }
