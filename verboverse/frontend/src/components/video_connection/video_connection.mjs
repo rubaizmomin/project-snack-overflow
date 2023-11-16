@@ -5,7 +5,14 @@ import { useLocation } from 'react-router-dom';
 import { useEffect } from 'react';
 import Transcript from '../transcript_display/speech_to_text_display.mjs';
 const firebaseConfig = {
-//
+  apiKey: "AIzaSyDeiAhAi21ev36X-B0z9_sN4YexK7o1VY4",
+  authDomain: "project-snack-overflow.firebaseapp.com",
+  databaseURL: "https://project-snack-overflow-default-rtdb.firebaseio.com/",
+  projectId: "project-snack-overflow",
+  storageBucket: "project-snack-overflow.appspot.com",
+  messagingSenderId: "689507442231",
+  appId: "1:689507442231:web:01a87229e518f779f5e9b2",
+  measurementId: "G-MVSPE072K6"
 };
 
 if (!firebase.apps.length) {
@@ -34,7 +41,6 @@ function Video_connection(){
   const [video, setvideo] = useState("Hide");
   const [disabled, setdisabled] = useState(true);
   const data = useLocation();
-  console.log(data);
   // replace HTML with video feedback object
   useEffect(() => {
     const webcam_on = async () => {
@@ -130,8 +136,10 @@ function Video_connection(){
     
       // get the invitee's sdp
       const callData = (await callDoc.get()).data();
-    
       // set the invitee's sdp as remoteDescription
+      if(callData === undefined){
+        return;
+      }
       const offerDescription = callData.offer;
       await pc.setRemoteDescription(new RTCSessionDescription(offerDescription));
     

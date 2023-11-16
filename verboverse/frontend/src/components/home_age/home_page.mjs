@@ -5,8 +5,8 @@ const Homepage = () => {
     const navigate = useNavigate();
     return(
     <div>
-        <button onClick={()=>navigate('/create')}>Go To Create</button>
-        <button onClick={()=>navigate('/join')}>Go To Join</button>
+        <button onClick={()=>navigate('/create')}>Create a Meeting</button>
+        <button onClick={()=>navigate('/join')}>Join a Meeting</button>
 
     </div>
     );
