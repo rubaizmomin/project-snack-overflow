@@ -30,10 +30,6 @@ const userSchema = new mongoose.Schema({
         type: String,
         default: 'user'
     },
-    calls: [{
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'Call'
-    }]
 }, {timestamps: true});
 
 // encrypt password before saving to database
