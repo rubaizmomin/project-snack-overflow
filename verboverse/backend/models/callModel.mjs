@@ -29,8 +29,14 @@ const callSchema = new mongoose.Schema({
             required: true,
         },
     },
-    offerCandidates: [offerSchema],
-    answerCandidates: [answerSchema],
+    offerCandidates: {
+        type: [offerSchema.schema], 
+        required: true,
+    },
+    answerCandidates: {
+        type: [answerSchema.schema], 
+        required: true,
+    },
 }); 
 
 export default mongoose.models?.Call || mongoose.model('Call', callSchema);
