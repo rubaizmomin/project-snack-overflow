@@ -12,6 +12,7 @@ import {errorHandler} from './middleware/error.mjs';
 
 // import routes
 import {authRoutes} from './routes/authRoutes.mjs';
+import {callRoutes} from './routes/callRoutes.mjs';
 
 // DATABASE CONNECTION
 mongoose.connect(process.env.DATABASE, {
@@ -34,6 +35,7 @@ app.use(cors());
 
 // ROUTES MIDDLEWARE
 app.use('/api', authRoutes);
+app.use('/api', callRoutes);
 
 // ERROR HANDLER
 app.use(errorHandler);
