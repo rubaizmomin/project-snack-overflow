@@ -1,0 +1,46 @@
+.meeting_title {
+
+}
+
+.videos_display {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.remote_video {
+  width: 60vw;
+  height: 45vw;
+  margin: 5px 2rem 5px 2rem;
+  border-radius: 19px;
+  background: #2c3e50;
+}
+
+.local_video {
+  width: 20vw;
+  height: 15vw;
+  margin: 5px 2rem 5px 2rem;
+  border-radius: 19px;
+  background: #2c3e50;
+}
+
+.video_button_display {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+.video_container {
+  position:relative;
+  display: inline-block;
+  z-index:0;
+}
+
+.overlay_text {
+  position:absolute;
+  top: 5px;
+  left: 2rem;
+  background-color: aliceblue;
+  z-index:1;
+}

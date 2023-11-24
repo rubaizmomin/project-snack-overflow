@@ -4,6 +4,8 @@ import 'firebase/compat/firestore';
 import { useLocation } from 'react-router-dom';
 import { useEffect } from 'react';
 import Transcript from '../transcript_display/speech_to_text_display.mjs';
+import './meeting.css';
+
 const firebaseConfig = {
   apiKey: "AIzaSyDeiAhAi21ev36X-B0z9_sN4YexK7o1VY4",
   authDomain: "project-snack-overflow.firebaseapp.com",
@@ -190,19 +192,25 @@ function Video_connection(){
     }
   }
   return(
-    <div>
-      <p>{data.state.callId}</p>
-      <span>
-        <h3>Remote Stream</h3>
-        <video ref={remotevideo} autoPlay playsInline></video>
-      </span>
-      <span>
-        <h3>Local Stream</h3>
-        <video ref={localvideo} autoPlay playsInline muted="muted"></video>
-      </span>
-      <button onClick={togglemute} disabled={disabled}>{mute}</button>
-      <button onClick={togglevideo} disabled={disabled}>{video}</button>
-      <Transcript />
+    <div className='videos_display'>
+      <h3 className='meeting_title'>Meeting</h3>
+      <p>Meeting ID: {data.state.callId}</p>
+      <div className='video_container'>
+        <video className='remote_video' ref={remotevideo} autoPlay playsInline></video>
+        <p className='overlay_text'>Remote Stream</p>
+        
+      </div>
+      <div className='video_button_display'>
+        <div className='video_container'>
+          <video className='local_video' ref={localvideo} autoPlay playsInline muted="muted"></video>
+          <p className='overlay_text'>Local Stream</p>
+        </div>
+        <div className='video_button_display'>
+          <button onClick={togglemute} disabled={disabled}>{mute}</button>
+          <button onClick={togglevideo} disabled={disabled}>{video}</button>
+          <Transcript />
+        </div>
+      </div>
     </div>
   )
 }
