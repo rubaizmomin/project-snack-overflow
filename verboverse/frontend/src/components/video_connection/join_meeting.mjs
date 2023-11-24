@@ -53,6 +53,10 @@ const Join_meeting = () =>{
     const answermeeting = async () => {
         // get the callID that the invitee shared and access the data
         const callId = callinput.current.value;
+        if(callId === ""){
+          console.log("WRONG MEETING ID");
+          return;
+        }
         const callDoc = firestore.collection('calls').doc(callId);
         // get the invitee's sdp
         const callData = (await callDoc.get()).data();
