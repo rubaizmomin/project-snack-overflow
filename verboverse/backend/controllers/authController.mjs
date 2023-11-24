@@ -2,9 +2,9 @@ import User from '../models/userModel.mjs';
 import { ErrorResponse } from '../utils/errorResponse.mjs';
 
 export async function signup (req, res, next) { 
-    const {email} = req.body;
+    const {email} = req.body.email;
     
-    const userExist = await User.findOne({email});
+    const userExist = await User.findOne({email: email});
     if (userExist) {
         return next(new ErrorResponse('Email already exists', 400));
     }
@@ -22,7 +22,8 @@ export async function signup (req, res, next) {
 
 export async function signin (req, res, next) {
     try {
-        const {email, password} = req.body; 
+        const email = req.body.email;
+        const password = req.body.password;
         if (!email) {
             return next(new ErrorResponse('Please enter an email', 403));
         } 

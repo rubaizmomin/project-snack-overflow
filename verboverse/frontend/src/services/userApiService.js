@@ -9,23 +9,23 @@ const fetchTemplate = async (url, params = {}) => {
     })
 }
 
-export const signup = async (user) => {
+export const signup = async (name, email, password) => {
     return await fetchTemplate('/signup', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
         },
-        body: JSON.stringify(user)
+        body: JSON.stringify({name, email, password})
     });
 }
 
-export const login = async (user) => {
+export const login = async (name, password) => {
     return await fetchTemplate('/login', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
         },
-        body: JSON.stringify(user)
+        body: JSON.stringify({name, password})
     });
 }
 

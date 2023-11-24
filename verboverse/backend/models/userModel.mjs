@@ -1,6 +1,7 @@
 import mongoose from 'mongoose';
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
+import Call from './callModel.mjs';
 
 const userSchema = new mongoose.Schema({
     name: {
@@ -30,10 +31,10 @@ const userSchema = new mongoose.Schema({
         type: String,
         default: 'user'
     },
-    calls: [{
-        type: mongoose.Schema.Types.ObjectId,
+    calls: {
+        type: [Call.schema],
         ref: 'Call'
-    }]
+    }
 }, {timestamps: true});
 
 // encrypt password before saving to database
