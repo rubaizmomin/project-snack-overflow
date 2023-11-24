@@ -4,9 +4,9 @@ import {  createCall, getCall, getCalls, addOfferCandidates, addOffer} from '../
 const router = express.Router();
 
 router.post('/createCall', createCall);
-router.post('/addOfferCandidates', addOfferCandidates); 
-router.post('/addOffer', addOffer); 
-router.get('/getCall', getCall);
+router.patch('/addOfferCandidates/:id', addOfferCandidates); 
+router.patch('/addOffer/:id', addOffer); 
+router.get('/getCall/:id/', getCall);
 router.get('/getCalls', getCalls);
 
 export const callRoutes = router;

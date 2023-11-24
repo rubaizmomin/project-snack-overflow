@@ -3,8 +3,13 @@ import { ErrorResponse } from '../utils/errorResponse.mjs';
 
 export async function createCall (req, res, next) {
     try {
-        // const {offer, answer, offerCandidates, answerCandidates} = req.body;
-        const call = await Call.create({});
+        const call = await Call.create({
+            offerCandidates: [],
+            offer: "",
+            answerCandidates: [],
+            answer: "",
+        });
+        console.log(call); 
         res.status(201).json({
             success: true,
             call
