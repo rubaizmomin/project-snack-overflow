@@ -1,6 +1,6 @@
 const BASE_URL = 'http://localhost:9000/api';
 
-const fetchTemplate = async (url, params = {}) => {
+const fetchTemplateCall = async (url, params = {}) => {
     return fetch(`${BASE_URL}${url}`, params).then((res) => {
         if (!res.ok) {
             throw new Error(res.statusText);
@@ -17,23 +17,23 @@ export const createCall = async () => {
         },
         body: JSON.stringify({ }),
       };
-    return fetchTemplate(`/createCall`, params);
+    return fetchTemplateCall(`/createCall`, params);
 }
 
 export const getCall = async (id) => {
-    return await fetchTemplate(`/getCall/${id}`, {
+    return await fetchTemplateCall(`/getCall/${id}`, {
         method: 'GET'
     });
 }
 
 export const getCalls = async () => {
-    return await fetchTemplate('/getCalls', {
+    return await fetchTemplateCall('/getCalls', {
         method: 'GET'
     });
 }
 
 export const addOfferCandidates = async (id, offerCandidates) => {
-    return await fetchTemplate(`/addOfferCandidates/${id}`, {
+    return await fetchTemplateCall(`/addOfferCandidates/${id}`, {
         method: 'PATCH',
         headers: {
             'Content-Type': 'application/json'
@@ -43,7 +43,7 @@ export const addOfferCandidates = async (id, offerCandidates) => {
 }
 
 export const addOffer = async (id, offer) => {
-    return await fetchTemplate(`/addOffer/${id}`, {
+    return await fetchTemplateCall(`/addOffer/${id}`, {
         method: 'PATCH',
         headers: {
             'Content-Type': 'application/json'

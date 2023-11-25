@@ -69,7 +69,7 @@ export async function addOffer (req, res, next) {
         const {offer} = req.body;
         const call = await Call.findById(req.params.id);
         if (!call) {
-            return next(new ErrorResponse('Call not found', 404));
+            return next(new ErrorResponse('Call not found', 404));git 
         }
         call.offer = offer;
         await call.save();

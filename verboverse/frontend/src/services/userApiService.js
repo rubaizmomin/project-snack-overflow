@@ -1,12 +1,8 @@
 const BASE_URL = 'http://localhost:9000/api';
 
 const fetchTemplate = async (url, params = {}) => {
-    return fetch(`${BASE_URL}${url}`, params).then((res) => {
-        if (!res.ok) {
-            throw new Error(res.statusText);
-        }
-        return res.json();
-    })
+    const res = await fetch(`${BASE_URL}${url}`, params); 
+    return res.json();
 }
 
 export const signup = async (name, email, password) => {
@@ -19,13 +15,13 @@ export const signup = async (name, email, password) => {
     });
 }
 
-export const login = async (name, password) => {
-    return await fetchTemplate('/login', {
+export const signin = async (email, password) => {
+    return await fetchTemplate('/signin', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
         },
-        body: JSON.stringify({name, password})
+        body: JSON.stringify({email, password})
     });
 }
 
