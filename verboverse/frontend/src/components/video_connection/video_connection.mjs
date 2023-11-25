@@ -193,8 +193,10 @@ function Video_connection({transcription_text}){
     }
   }
   useEffect(()=>{
-    if(channel.readyState === 'open')
-      channel.send(transcription_text);
+    if(channel.readyState === 'open'){
+      if(mute === "Mute")
+        channel.send(transcription_text);
+    }
   }, [transcription_text]);
 
   channel.onmessage = (event) => {
