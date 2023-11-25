@@ -1,10 +1,13 @@
 import React from 'react';
 import Particles from 'react-tsparticles';
 import ParticlesConfig from "./config/particles-config.js";
+import './particles-bg.css';
 
 const ParticlesBg = () => {
   return(
-    <Particles params={ParticlesConfig}></Particles>
+    <div className='particle-container'>
+      <Particles params={ParticlesConfig} />
+    </div>
     );
 }
 
