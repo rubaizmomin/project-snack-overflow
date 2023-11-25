@@ -38,7 +38,7 @@ const remotevideo = React.createRef();
 const textinput = React.createRef();
 let localStream;
 let remoteStream;
-function Video_connection(){
+function Video_connection({transcription_text}){
   const [mute, setmute] = useState("Mute");
   const [video, setvideo] = useState("Hide");
   const [disabled, setdisabled] = useState(true);
@@ -192,11 +192,11 @@ function Video_connection(){
       setvideo("Hide");
     }
   }
-  const sendmessage = async() => {
-    // channel.onopen = (event) =>{};
-      channel.send(textinput.current.value);
-      textinput.current.value = '';
-  }
+  useEffect(()=>{
+    if(channel.readyState === 'open')
+      channel.send(transcription_text);
+  }, [transcription_text]);
+
   channel.onmessage = (event) => {
     settext(event.data);
   };
@@ -211,12 +211,11 @@ function Video_connection(){
         <h3>Local Stream</h3>
         <video ref={localvideo} autoPlay playsInline muted="muted"></video>
       </span>
-      <input ref={textinput}/>
+      {/* <input ref={textinput}/> */}
       <p>{text}</p>
-      <button onClick={sendmessage} disabled={disabled}>Send</button>
+      {/* <button onClick={sendmessage} disabled={disabled}>Send</button> */}
       <button onClick={togglemute} disabled={disabled}>{mute}</button>
       <button onClick={togglevideo} disabled={disabled}>{video}</button>
-      <Transcript />
     </div>
   )
 }
