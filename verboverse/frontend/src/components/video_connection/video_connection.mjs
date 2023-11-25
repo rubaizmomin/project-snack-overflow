@@ -31,15 +31,18 @@ const servers = {
   };
 
 const pc = new RTCPeerConnection(servers);
+const channel = pc.createDataChannel("chat", { negotiated: true, id: 0 });
 
 const localvideo = React.createRef();
 const remotevideo = React.createRef();
+const textinput = React.createRef();
 let localStream;
 let remoteStream;
 function Video_connection(){
   const [mute, setmute] = useState("Mute");
   const [video, setvideo] = useState("Hide");
   const [disabled, setdisabled] = useState(true);
+  const [text, settext] = useState('');
   const data = useLocation();
   // replace HTML with video feedback object
   useEffect(() => {
@@ -189,6 +192,14 @@ function Video_connection(){
       setvideo("Hide");
     }
   }
+  const sendmessage = async() => {
+    // channel.onopen = (event) =>{};
+      channel.send(textinput.current.value);
+      textinput.current.value = '';
+  }
+  channel.onmessage = (event) => {
+    settext(event.data);
+  };
   return(
     <div>
       <p>{data.state.callId}</p>
@@ -200,6 +211,9 @@ function Video_connection(){
         <h3>Local Stream</h3>
         <video ref={localvideo} autoPlay playsInline muted="muted"></video>
       </span>
+      <input ref={textinput}/>
+      <p>{text}</p>
+      <button onClick={sendmessage} disabled={disabled}>Send</button>
       <button onClick={togglemute} disabled={disabled}>{mute}</button>
       <button onClick={togglevideo} disabled={disabled}>{video}</button>
       <Transcript />
