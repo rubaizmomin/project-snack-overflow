@@ -29,7 +29,8 @@ export default function SignIn() {
     const response = await signin(data.get('email'), data.get('password'));
     console.log(response);
     if (response.success) {
-        toast.success("Successfully signed in!")
+        toast.success("Successfully signed in!"); 
+        directToHome();
     } else {
         toast.error('Failed to sign in!');
     }
@@ -39,6 +40,10 @@ export default function SignIn() {
   const redirectToAnotherPage = () => {
     navigate('/signup');
   };
+
+  const directToHome = () => {
+    navigate('/');
+  }
 
   return (
     <ThemeProvider theme={defaultTheme}>

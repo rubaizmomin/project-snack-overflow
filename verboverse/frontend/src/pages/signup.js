@@ -24,7 +24,8 @@ export default function SignUp() {
     const response = await signup(data.get('firstName') + ' ' + data.get('lastName'), data.get('email'), data.get('password'));
     console.log(response);
     if (response.success) {
-        toast.success("Successfully signed up!")
+        toast.success("Successfully signed up!"); 
+        directToHome();
     } else {
         toast.error('Failed to sign up!');
     }
@@ -34,6 +35,10 @@ export default function SignUp() {
   const redirectToAnotherPage = () => {
     navigate('/signin');
   };
+
+  const directToHome = () => {
+    navigate('/');
+  }
 
   return (
     <ThemeProvider theme={defaultTheme}>
