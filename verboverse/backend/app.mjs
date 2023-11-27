@@ -12,7 +12,6 @@ import {errorHandler} from './middleware/error.mjs';
 
 // import routes
 import {authRoutes} from './routes/authRoutes.mjs';
-import {callRoutes} from './routes/callRoutes.mjs';
 
 // enable cors
 app.use(cors());
@@ -38,7 +37,6 @@ app.use(cors());
 
 // ROUTES MIDDLEWARE
 app.use('/api', authRoutes);
-app.use('/api', callRoutes);
 
 // ERROR HANDLER
 app.use(errorHandler);
