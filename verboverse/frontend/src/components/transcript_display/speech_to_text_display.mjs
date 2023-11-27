@@ -78,6 +78,7 @@ function Transcript() {
     setInfo('On');
     start_timestamp = event.timeStamp;
   };
+
   return(
     <div id="results">
       <Video_connection transcription_text={interimSpan}/>

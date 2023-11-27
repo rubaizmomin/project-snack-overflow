@@ -10,32 +10,30 @@ const callSchema = new mongoose.Schema({
     offer: {
         sdp: {
             type: String,
-            required: true,
             minlength: 3
         },
         type: {
             type: String,
-            required: true,
         },
     },
     answer: {
         sdp: {
             type: String,
-            required: true,
+            // required: true,
             minlength: 3
         },
         type: {
             type: String,
-            required: true,
+            // required: true,
         },
     },
     offerCandidates: {
         type: [offerSchema.schema], 
-        required: true,
+        // required: true,
     },
     answerCandidates: {
         type: [answerSchema.schema], 
-        required: true,
+        // required: true,
     },
 }); 
 
