@@ -220,6 +220,7 @@ function Video_connection({transcription_text}){
       <div className='video_container'>
         <video className='remote_video' ref={remotevideo} autoPlay playsInline></video>
         <p className='overlay_text'>Remote Stream</p>
+        <p className='subtitle'>{text}</p>
         {/* <p className='subtitle'>Testing subtitle longer longer longer text heyehhhhhh hhhhhhhhhhh how about this???</p> */}
       </div>
       <div className='video_button_display'>
@@ -229,7 +230,6 @@ function Video_connection({transcription_text}){
         </div>
         <div className='video_button_display'>
           {/* <input ref={textinput}/> */}
-      <p>{text}</p>
       {/* <button onClick={sendmessage} disabled={disabled}>Send</button> */}
       <button onClick={togglemute} disabled={disabled}>{mute}</button>
           <button onClick={togglevideo} disabled={disabled}>{video}</button>
