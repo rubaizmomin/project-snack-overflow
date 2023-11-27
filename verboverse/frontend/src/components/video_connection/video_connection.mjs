@@ -1,5 +1,7 @@
 import firebase from 'firebase/compat/app';
 import React, { useState } from 'react';
+import { signup, login, logout, me } from '../../services/userApiService.js';
+import { createCall, getCall, getCalls, addOfferCandidates, addOffer } from '../../services/callApiService.js';
 import 'firebase/compat/firestore';
 import { useLocation } from 'react-router-dom';
 import { useEffect } from 'react';
@@ -14,13 +16,20 @@ const firebaseConfig = {
   storageBucket: "project-snack-overflow.appspot.com",
   messagingSenderId: "689507442231",
   appId: "1:689507442231:web:01a87229e518f779f5e9b2",
+  measurementId: "G-MVSPE072K6",
+  apiKey: "AIzaSyDeiAhAi21ev36X-B0z9_sN4YexK7o1VY4",
+  authDomain: "project-snack-overflow.firebaseapp.com",
+  databaseURL: "https://project-snack-overflow-default-rtdb.firebaseio.com/",
+  projectId: "project-snack-overflow",
+  storageBucket: "project-snack-overflow.appspot.com",
+  messagingSenderId: "689507442231",
+  appId: "1:689507442231:web:01a87229e518f779f5e9b2",
   measurementId: "G-MVSPE072K6"
 };
 
 if (!firebase.apps.length) {
   firebase.initializeApp(firebaseConfig);
 }
-
 const firestore = firebase.firestore();
 
 const servers = {
@@ -33,15 +42,18 @@ const servers = {
   };
 
 const pc = new RTCPeerConnection(servers);
+const channel = pc.createDataChannel("chat", { negotiated: true, id: 0 });
 
 const localvideo = React.createRef();
 const remotevideo = React.createRef();
+const textinput = React.createRef();
 let localStream;
 let remoteStream;
-function Video_connection(){
+function Video_connection({transcription_text}){
   const [mute, setmute] = useState("Mute");
   const [video, setvideo] = useState("Hide");
   const [disabled, setdisabled] = useState(true);
+  const [text, settext] = useState('');
   const data = useLocation();
   // replace HTML with video feedback object
   useEffect(() => {
@@ -191,6 +203,16 @@ function Video_connection(){
       setvideo("Hide");
     }
   }
+  useEffect(()=>{
+    if(channel.readyState === 'open'){
+      if(mute === "Mute")
+        channel.send(transcription_text);
+    }
+  }, [transcription_text]);
+
+  channel.onmessage = (event) => {
+    settext(event.data);
+  };
   return(
     <div className='videos_display'>
       <h3 className='meeting_title'>Meeting</h3>
@@ -206,10 +228,12 @@ function Video_connection(){
           <p className='overlay_text'>Local Stream</p>
         </div>
         <div className='video_button_display'>
-          <button onClick={togglemute} disabled={disabled}>{mute}</button>
+          {/* <input ref={textinput}/> */}
+      <p>{text}</p>
+      {/* <button onClick={sendmessage} disabled={disabled}>Send</button> */}
+      <button onClick={togglemute} disabled={disabled}>{mute}</button>
           <button onClick={togglevideo} disabled={disabled}>{video}</button>
-          <Transcript />
-        </div>
+            </div>
       </div>
     </div>
   )

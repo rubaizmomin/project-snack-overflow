@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import Video_connection from '../video_connection/video_connection.mjs';
 
 var SpeechRecognition = window.webkitSpeechRecognition;
 var recognition = new SpeechRecognition();
@@ -77,8 +78,10 @@ function Transcript() {
     setInfo('On');
     start_timestamp = event.timeStamp;
   };
+
   return(
     <div id="results">
+      <Video_connection transcription_text={interimSpan}/>
       <p>Transcript 
         <span id="info"> ({info}):<br /></span>
         <span id="finalSpan" style={{color:'black'}}>{finalSpan}</span>

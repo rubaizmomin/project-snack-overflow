@@ -13,6 +13,9 @@ import {errorHandler} from './middleware/error.mjs';
 // import routes
 import {authRoutes} from './routes/authRoutes.mjs';
 
+// enable cors
+app.use(cors());
+
 // DATABASE CONNECTION
 mongoose.connect(process.env.DATABASE, {
     useNewUrlParser: true,
