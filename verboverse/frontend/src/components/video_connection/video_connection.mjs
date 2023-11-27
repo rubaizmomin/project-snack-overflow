@@ -198,7 +198,7 @@ function Video_connection(){
       <div className='video_container'>
         <video className='remote_video' ref={remotevideo} autoPlay playsInline></video>
         <p className='overlay_text'>Remote Stream</p>
-        
+        {/* <p className='subtitle'>Testing subtitle longer longer longer text heyehhhhhh hhhhhhhhhhh how about this???</p> */}
       </div>
       <div className='video_button_display'>
         <div className='video_container'>
