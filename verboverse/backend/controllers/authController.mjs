@@ -1,12 +1,15 @@
 import User from '../models/userModel.mjs';
 import { ErrorResponse } from '../utils/errorResponse.mjs';
 
-export async function signup (req, res, next) {
-    const {email} = req.body;
+export async function signup (req, res, next) { 
+    const {email} = req.body.email;
     
-    const userExist = await User.findOne({email});
+    const userExist = await User.findOne({email: email});
     if (userExist) {
-        return next(new ErrorResponse('Email already exists', 400));
+        return res.status(400).json({
+            success: false,
+            message: "User already exists"
+        })
     }
     try {
         const user = await User.create(req.body);
@@ -21,30 +24,43 @@ export async function signup (req, res, next) {
 }
 
 export async function signin (req, res, next) {
-    try {
-        const {email, password} = req.body; 
+        const email = req.body.email;
+        const password = req.body.password;
+
         if (!email) {
-            return next(new ErrorResponse('Please enter an email', 403));
+            return res.status(403).json({
+                success: false,
+                message: "Please enter an email"
+            })
         } 
         if (!password) {
-            return next(new ErrorResponse('Please enter a password', 403));
+            return res.status(403).json({
+                success: false,
+                message: "Please enter a password"
+            })
         }
 
-        const user = await User.findOne({email}); 
+        const user = await User.findOne({email: email}); 
         if (!user) {
-            return next(new ErrorResponse('Invalid credentials', 400));
+            return res.status(400).json({
+                success: false,
+                message: "User does not exist"
+            })
         }
 
         const isMatch = await user.comparePassword(password);
         if (!isMatch) {
-            return next(new ErrorResponse('Invalid credentials', 400));
+            return res.status(400).json({
+                success: false,
+                message: "Invalid credentials"
+            })
         }
 
-        sendTokenResponse(user, 200, res);
-
-    } catch (error) {
-        next(error);
-    }
+        try {
+            sendTokenResponse(user, 200, res);
+        } catch (error) {
+            next(error);
+        }
 }
 
 const sendTokenResponse = async(user, codeStatus, res) => {
