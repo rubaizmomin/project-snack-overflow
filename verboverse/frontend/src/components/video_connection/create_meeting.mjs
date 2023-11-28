@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Route, Routes, useNavigate } from "react-router-dom";
+import classnames from 'classnames';
 import firebase from 'firebase/compat/app';
 const firebaseConfig = {
     apiKey: "AIzaSyDeiAhAi21ev36X-B0z9_sN4YexK7o1VY4",
@@ -19,8 +20,10 @@ const firebaseConfig = {
   const firestore = firebase.firestore();
 let localStream;
 const Create_meeting = () =>{
-    const [mute, setmute] = useState("Mute");
-    const [video, setvideo] = useState("Hide");
+    const [micIcon, setMicIcon] = useState("unmute-icon");
+    const [cameraIcon, setCameraIcon] = useState("camera-on-icon");
+    const [iconDisabled, setIconDisabled] = useState("disabled");
+    const [pmsBtnDisabled, setPmsBtnDisabled] = useState("");
     const [disabled, setdisabled] = useState(true);
     const localvideo = React.createRef();
     const navigate = useNavigate();
@@ -35,35 +38,46 @@ const Create_meeting = () =>{
         // replace HTML with video feedback object
         localvideo.current.srcObject = localStream;
         setdisabled(false);
+        setIconDisabled("");
+        setPmsBtnDisabled("disabled");
     }
     const togglemute = () => {
         if(localStream.getTracks().find(track => track.kind === 'audio').enabled){
           localStream.getTracks().find(track => track.kind === 'audio').enabled = false;
-          setmute("Unmute")
+          setMicIcon("mute-icon");
         } else {
           localStream.getTracks().find(track => track.kind === 'audio').enabled = true;
-          setmute("Mute")
+          setMicIcon("unmute-icon");
         }
       }
     const togglevideo = () => {
         if(localStream.getTracks().find(track => track.kind === 'video').enabled){
             localStream.getTracks().find(track => track.kind === 'video').enabled = false;
-            setvideo("Show")
+            setCameraIcon("camera-off-icon");
         } else {
             localStream.getTracks().find(track => track.kind === 'video').enabled = true;
-            setvideo("Hide");
+            setCameraIcon("camera-on-icon");
         }
     }
     return(
-        <div>
-            <span>
-                <h3>Local Stream</h3>
+        <div className='videos_display'>
+            <h3>Video Preview</h3>
+            <div className='video_container'>
+                <p className='overlay_text'>Local Stream</p>
                 <video ref={localvideo} autoPlay playsInline muted="muted"></video>
-            </span>
-            <button onClick={webcam} >Video and Audio permissions</button>
-            <button onClick={handleClick} disabled={disabled}>Create Meeting</button>
-            <button onClick={togglemute} disabled={disabled}>{mute}</button>
-            <button onClick={togglevideo} disabled={disabled}>{video}</button>
+            </div>
+            <div className='video_button_display'>
+                <button className={classnames("btn btn_blue", pmsBtnDisabled)} onClick={webcam} disabled={!disabled}>Video and Audio permissions</button>
+                <button className="btn-action" onClick={togglemute} disabled={disabled}>
+                    <div className={classnames(micIcon, iconDisabled, "icon")}></div>
+                </button>
+                <button className="btn-action" onClick={togglevideo} disabled={disabled}>
+                    <div className={classnames(cameraIcon, iconDisabled, "icon")}></div>
+                </button>
+            </div>
+            <div className='video_button_display'>
+                <button className={classnames("btn btn_pink", iconDisabled)} onClick={handleClick} disabled={disabled}>Create Meeting</button>
+            </div>
         </div>
     )
 }

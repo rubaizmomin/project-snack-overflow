@@ -126,10 +126,11 @@ const Homepage = () => {
                     </DialogContent>
                 </Sheet>
             </Drawer>
-            <a href="./" className="title">VerboVerse</a>
+            <div className="verboverse"></div>
+            {/* <a href="./" className="title">VerboVerse</a> */}
             <div className="button_display">
-                <button className="btn" onClick={()=>navigate('/create')}>New Meeting</button>
-                <button className="btn" onClick={()=>navigate('/join')}>Join Meeting</button>
+                <button className="btn btn_blue large_btn" onClick={()=>navigate('/create')}>New Meeting</button>
+                <button className="btn btn_pink large_btn" onClick={()=>navigate('/join')}>Join Meeting</button>
             </div>
     
         </div>

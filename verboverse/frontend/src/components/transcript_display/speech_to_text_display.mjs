@@ -81,7 +81,8 @@ function Transcript() {
 
   return(
     <div id="results">
-      <Video_connection transcription_text={interimSpan}/>
+      <Video_connection transcription_text={interimSpan} handleTranscriptStatus={showTranscript}/>
+      {/** TODO: merge w/ transcript branch to avoid finalSpan storing all the text */}
       <p>Transcript 
         <span id="info"> ({info}):<br /></span>
         <span id="finalSpan" style={{color:'black'}}>{finalSpan}</span>
