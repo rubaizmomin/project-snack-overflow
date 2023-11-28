@@ -1,8 +1,8 @@
 import express from 'express';
-import { getFromCache, setToCache } from '../controllers/cacheController.mjs';
+import { cacheData, getData } from '../controllers/memcacheController.mjs';
 const router = express.Router();
 
-router.post('/addText', setToCache); 
-router.get('/translate', getFromCache);
+router.post('/cache', cacheData); 
+router.get('/getCache', getData);
 
 export const memcacheRoutes = router;
