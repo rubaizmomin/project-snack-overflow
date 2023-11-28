@@ -1,12 +1,14 @@
 import firebase from 'firebase/compat/app';
 import React, { useState } from 'react';
-import { signup, login, logout, me } from '../../services/userApiService.js';
-import { createCall, getCall, getCalls, addOfferCandidates, addOffer } from '../../services/callApiService.js';
 import 'firebase/compat/firestore';
 import { useLocation } from 'react-router-dom';
 import { useEffect } from 'react';
+<<<<<<< HEAD
 import Transcript from '../transcript_display/speech_to_text_display.mjs';
 import { sendEmail } from '../../services/sendGridApiService.js';
+=======
+import {translate} from '../../services/translateApiService.js';
+>>>>>>> feature/memcache-setup
 
 const firebaseConfig = {
   apiKey: "AIzaSyDeiAhAi21ev36X-B0z9_sN4YexK7o1VY4",
@@ -49,6 +51,8 @@ const remotevideo = React.createRef();
 const textinput = React.createRef();
 let localStream;
 let remoteStream;
+let target = "fr";
+
 function Video_connection({transcription_text}){
   const [mute, setmute] = useState("Mute");
   const [video, setvideo] = useState("Hide");
@@ -56,6 +60,9 @@ function Video_connection({transcription_text}){
   const [text, settext] = useState('');
   const data = useLocation();
   // replace HTML with video feedback object
+  // const appendTranslatedText = (newtext) => {
+  //   settext(text + newtext);
+  // }
   useEffect(() => {
     const webcam_on = async () => {
       localStream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
@@ -211,8 +218,9 @@ function Video_connection({transcription_text}){
     }
   }, [transcription_text]);
 
-  channel.onmessage = (event) => {
-    settext(event.data);
+  channel.onmessage = async (event) => {
+    let incomingtext = await translate(event.data, target);
+    settext(incomingtext.translation);
   };
   return(
     <div>
