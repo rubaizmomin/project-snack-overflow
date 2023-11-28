@@ -30,12 +30,19 @@ export async function cacheData (req, res, next) {
 
 export async function getData (req, res, next) {
     const {key} = req.body.key;
-    const cachedData = await memcachedClient.get(key);
-    if (cachedData.value) {
-        res.send(JSON.parse(cachedData.value.toString()));
-    } else {
-        res.send('No data found in the cache');
-    }
+    memcachedClient.get(key, function (err, data) {
+        if (err) {
+            return res.status(500).json({
+                success: false,
+                error: err
+            });
+        } else {
+            return res.status(200).json({
+                success: true,
+                data
+            });
+        }
+    }); 
 }
 
 
