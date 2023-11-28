@@ -1,4 +1,5 @@
-import sendEmail from "../models/sendgrid.mjs";
+import sgMail from "../models/sendgrid.mjs";
+import User from "../models/userModel.mjs";
 
 export async function checkIfUserExists(email) {
 
@@ -32,7 +33,19 @@ export async function sendEmail(req, res) {
         <p>Click <a href="http://localhost:3000/invite/${code}">here</a> to join.</p>
     `;
 
-    sendEmail(to, from, subject, msg);
-    res.redirect("/sent");
+    const email = {
+        to,
+        from,
+        subject,
+        html: msg
+    };
+
+    sgMail.send(email, function(err, result) {
+        if (err) {
+            console.log(err);
+        } else {
+            console.log(result);
+        }
+    });
 
 }
