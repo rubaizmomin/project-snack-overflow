@@ -16,7 +16,7 @@ const sendEmail = (to, from, subject, text) => {
         } else {
             console.log(result);
         }
-    }); 
+    });
 
 }
 
