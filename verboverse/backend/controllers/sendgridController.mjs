@@ -42,9 +42,14 @@ export async function sendEmail(req, res) {
 
     sgMail.send(email, function(err, result) {
         if (err) {
-            console.log(err);
+            return res.status(400).json({
+                success: false,
+                error: err
+            })
         } else {
-            console.log(result);
+            return res.status(200).json({
+                success: true,
+            })
         }
     });
 
