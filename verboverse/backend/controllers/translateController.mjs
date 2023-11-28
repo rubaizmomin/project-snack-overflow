@@ -2,21 +2,15 @@ import translate from '../models/translate.js';
 
 export async function translateText (req, res, next) {
     try {
-        const text = req.body.text; 
-        const target = req.body.target;
+        let text = req.body.text; 
+        let target = req.body.target;
         console.log(text);
         console.log(target);
-        const [translations] = await translate.translate(text, target);
-        translations = Array.isArray(translations) ? translations : [translations];
-        console.log('Translations:');
-        translations.forEach((translation, i) => {
-            console.log(`${text[i]} => (${target}) ${translation}`);
-        })
-
-        translateText(); 
-
+        let translations = await translate.translate(text, target);
+        console.log(translations); 
+        res.status(200).send(translations[0]);
     } catch (error) {
-        next(error);
+        console.log(error);
     }
 
 }
