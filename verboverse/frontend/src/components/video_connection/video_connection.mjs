@@ -53,7 +53,7 @@ let remoteStream;
 function Video_connection({transcription_text, handleTranscriptStatus}){
   const [micIcon, setMicIcon] = useState("unmute-icon");
   const [cameraIcon, setCameraIcon] = useState("camera-on-icon");
-  const [transcriptIcon, setTranscriptIcon] = useState("transcript-on-icon");
+  const [transcriptIcon, setTranscriptIcon] = useState("transcript-off-icon");
   const [iconDisabled, setIconDisabled] = useState("disabled");
   const [disabled, setdisabled] = useState(true);
   const [text, settext] = useState('');
@@ -246,8 +246,6 @@ function Video_connection({transcription_text, handleTranscriptStatus}){
       </div>
       
       <div className='video_button_display'>
-        {/* <input ref={textinput}/> */}
-        {/* <button onClick={sendmessage} disabled={disabled}>Send</button> */}
         <button className="btn-action" onClick={togglemute} disabled={disabled}>
           <div className={classnames(micIcon, iconDisabled, "icon")}></div>
         </button>

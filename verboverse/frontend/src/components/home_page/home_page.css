@@ -1,13 +1,3 @@
-.title {
-  font-family: Copperplate, Impact, 'Arial Narrow Bold', fantasy;
-  font-size: 56px;
-  color: #3c3d3f;
-  text-align: left;
-  max-width: 100%;
-  text-decoration: none;
-  margin: auto;
-}
-
 .verboverse {
   position: absolute;
   width: 35vw;
@@ -19,17 +9,6 @@
   background-repeat: no-repeat;
   background-size: 100%;
   background-image: url("./media/verboverse.png");
-}
-
-.content {
-  font-family: Copperplate, Impact, 'Arial Narrow Bold', fantasy;
-  font-size: 14px;
-  color: #3c3d3f;
-  text-align: left;
-  max-width: 60%;
-  margin: auto;
-  display: flex;
-  flex-direction: column;
 }
 
 .button_display {
