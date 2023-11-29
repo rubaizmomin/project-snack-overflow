@@ -8,7 +8,7 @@ const fetchTemplate = async (url, params = {}) => {
 export const sendEmail = async (to, code) => {
     return await fetchTemplate('/sendEmail', {
         method: 'POST',
-        
+        mode: 'cors',
         headers: {
             'Content-Type': 'application/json'
         },
