@@ -35,12 +35,12 @@ const Create_meeting = () =>{
         if(matched !== null){
             const callId = firestore.collection('calls').doc().id;
             await sendEmail(emailinput.current.value, callId);
-            navigate('/video', {state: {video: localStream.getTracks().find(track => track.kind === 'video').enabled, 
+            navigate(`/meeting/${callId}`, {state: {video: localStream.getTracks().find(track => track.kind === 'video').enabled, 
                                                 audio: localStream.getTracks().find(track => track.kind === 'audio').enabled, 
                                                 callId: callId, privilege: "offer"}})
         }
         else
-            console.log("WRONG EMAIL");
+            console.log("NOT AN EMAIL OR NOT REGISTERED");
     }
     useEffect(()=>{
         const turnon = async () => {

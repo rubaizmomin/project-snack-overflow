@@ -40,7 +40,7 @@ const Join_meeting = () =>{
     const localvideo = React.createRef();
     const navigate = useNavigate();
     const handleClick = () => {
-        navigate('/video', {state: {video: localStream.getTracks().find(track => track.kind === 'video').enabled, 
+        navigate(`/meeting/${callinput.current.value}`, {state: {video: localStream.getTracks().find(track => track.kind === 'video').enabled, 
                                     audio: localStream.getTracks().find(track => track.kind === 'audio').enabled, 
                                     callId: callinput.current.value, privilege: "answer"}});
     }
@@ -50,6 +50,8 @@ const Join_meeting = () =>{
         }
         turnon();
         const meetingId = window.location.href.split("/")[4];
+        if(meetingId === undefined)
+            meetingId = "";
         callinput.current.value = meetingId;
     }, []);
     const webcam = async () => {

@@ -18,7 +18,7 @@ function App() {
           <Route path='/home' element={<Homepage />} />
           <Route path='/create/' element={<Create_meeting />} />
           <Route path='/join/*' element={<Join_meeting />} />
-          <Route path='/video' element={<Transcript />} />
+          <Route path='/meeting/*' element={<Transcript />} />
         </Routes>
     </div>
   );
