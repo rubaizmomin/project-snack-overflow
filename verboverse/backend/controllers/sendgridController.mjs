@@ -31,7 +31,6 @@ export async function sendEmail(req, res) {
         <h1>Invitation to join Verboverse</h1>
         <p>You have been invited to join Verboverse!</p>
         <p>Click <a href="http://localhost:3000/invite/${code}">here</a> to join.</p>
-        <p>YOur Verboverse Meeting ID is: ${code}<p>
     `;
 
     const email = {
