@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Route, Routes, useNavigate } from "react-router-dom";
 import classnames from 'classnames';
 import firebase from 'firebase/compat/app';
@@ -32,10 +32,16 @@ const Create_meeting = () =>{
                                                 audio: localStream.getTracks().find(track => track.kind === 'audio').enabled, 
                                                 callId: firestore.collection('calls').doc().id, privilege: "offer"}})
     }
+    useEffect(()=>{
+        const turnon = async () => {
+            localStream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
+        }
+        turnon();
+    }, []);
     const webcam = async () => {
         //get permissions for audio and video
-        localStream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
         // replace HTML with video feedback object
+        // localStream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
         localvideo.current.srcObject = localStream;
         setdisabled(false);
         setIconDisabled("");

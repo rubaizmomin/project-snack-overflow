@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Route, Routes, useNavigate } from "react-router-dom";
+import { useEffect } from 'react';
 import classnames from 'classnames';
 import 'firebase/compat/firestore';
 import firebase from 'firebase/compat/app';
@@ -46,9 +47,15 @@ const Join_meeting = () =>{
                                     audio: localStream.getTracks().find(track => track.kind === 'audio').enabled, 
                                     callId: callinput.current.value, privilege: "answer"}});
     }
+    useEffect(()=>{
+        const turnon = async () => {
+            localStream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
+        }
+        turnon();
+    }, []);
     const webcam = async () => {
         //get permissions for audio and video
-        localStream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
+        // localStream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
         // replace HTML with video feedback object
         localvideo.current.srcObject = localStream;
         setdisabled(false);
