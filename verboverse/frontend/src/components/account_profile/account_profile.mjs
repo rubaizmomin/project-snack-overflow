@@ -2,6 +2,7 @@ import React, { useState, useRef } from 'react';
 import { Popper, ClickAwayListener } from '@mui/base';
 import { Avatar, Drawer, Sheet, DialogTitle, ModalClose, Divider, DialogContent, Typography,
          MenuItem, Button, MenuList, styled } from '@mui/joy';
+import { langs } from './languages.mjs';
 
 const Popup = styled(Popper)({
     zIndex: 1000,
@@ -59,13 +60,13 @@ const AccountProfile = () => {
                     <ModalClose />
                     <Divider sx={{ mt: 'auto' }} />
                     <DialogContent sx={{ gap: 2 }}>
-                        <Typography level="title-md" fontWeight="bold" sx={{ mt: 1 }}>
+                        <Typography align="left" level="title-md" fontWeight="bold" sx={{ mt: 1 }}>
                             Username:
                         </Typography>
-                        <Typography level="title-md" fontWeight="bold" sx={{ mt: 1 }}>
+                        <Typography align="left" level="title-md" fontWeight="bold" sx={{ mt: 1 }}>
                             Email:
                         </Typography>
-                        <Typography level="title-md" fontWeight="bold" sx={{ mt: 1 }}>
+                        <Typography align="left" level="title-md" fontWeight="bold" sx={{ mt: 1 }}>
                             Primary Language:
                         </Typography>
                         <div>
@@ -98,23 +99,26 @@ const AccountProfile = () => {
                                 },
                                 ]}
                             >
-                                <ClickAwayListener
-                                onClickAway={(event) => {
-                                    if (event.target !== buttonRef.current) {
-                                    handleCloseDropdown();
-                                    }
-                                }}
-                                >
-                                <MenuList
-                                    variant="outlined"
-                                    onKeyDown={handleListKeyDown}
-                                    sx={{ boxShadow: 'md' }}
-                                >
-                                    <MenuItem onClick={ () => { handleCloseDropdown(); setLanguage('English (CA)');}}>English (CA)</MenuItem>
-                                    <MenuItem onClick={ () => { handleCloseDropdown(); setLanguage('French (CA)');}}>French (CA)</MenuItem>
-                                    <MenuItem onClick={ () => { handleCloseDropdown(); setLanguage('Spanish');}}>Spanish</MenuItem>
-                                </MenuList>
-                                </ClickAwayListener>
+                                    <ClickAwayListener
+                                    onClickAway={(event) => {
+                                        if (event.target !== buttonRef.current) {
+                                        handleCloseDropdown();
+                                        }
+                                    }}
+                                    >
+                                    <MenuList
+                                        variant="outlined"
+                                        onKeyDown={handleListKeyDown}
+                                        sx={{ boxShadow: 'md' }}
+                                    >
+                                        {langs.map(([lang, [id]]) => (
+                                            <MenuItem key={id} onClick={ () => { handleCloseDropdown(); setLanguage(lang);}}>{lang}</MenuItem>
+                                        ))}
+                                        <MenuItem onClick={ () => { handleCloseDropdown(); setLanguage('English (CA)');}}>English (CA)</MenuItem>
+                                        <MenuItem onClick={ () => { handleCloseDropdown(); setLanguage('French (CA)');}}>French (CA)</MenuItem>
+                                        <MenuItem onClick={ () => { handleCloseDropdown(); setLanguage('Spanish');}}>Spanish</MenuItem>
+                                    </MenuList>
+                                    </ClickAwayListener>
                             </Popup>
                         </div>
                     </DialogContent>

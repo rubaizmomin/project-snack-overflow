@@ -1,15 +1,15 @@
 import React, { useState, useEffect } from 'react';
 import Video_connection from '../video_connection/video_connection.mjs';
 
-var SpeechRecognition = window.webkitSpeechRecognition;
-var recognition = new SpeechRecognition();
+let SpeechRecognition = window.webkitSpeechRecognition;
+let recognition = new SpeechRecognition();
 recognition.continuous = true;
 recognition.interimResults = true;
 
-var recognizing = false;
-var finalTranscript = '';
+let recognizing = false;
+let finalTranscript = '';
 let ignore_onend;
-var start_timestamp;
+let start_timestamp;
 var languageChosen = 'en-CA';
 
 function Transcript() {
@@ -63,7 +63,9 @@ function Transcript() {
     };
   });
   useEffect(()=>{
+    recognition.lang = languageChosen;
     recognition.start();
+    start_timestamp = performance.now();
   }, []);
 
   return(
