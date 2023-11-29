@@ -3,12 +3,9 @@ import React, { useState } from 'react';
 import 'firebase/compat/firestore';
 import { useLocation } from 'react-router-dom';
 import { useEffect } from 'react';
-<<<<<<< HEAD
 import Transcript from '../transcript_display/speech_to_text_display.mjs';
 import { sendEmail } from '../../services/sendGridApiService.js';
-=======
 import {translate} from '../../services/translateApiService.js';
->>>>>>> feature/memcache-setup
 
 const firebaseConfig = {
   apiKey: "AIzaSyDeiAhAi21ev36X-B0z9_sN4YexK7o1VY4",
