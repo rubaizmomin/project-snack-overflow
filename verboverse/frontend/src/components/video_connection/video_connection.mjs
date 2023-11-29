@@ -50,10 +50,10 @@ const remotevideo = React.createRef();
 const textinput = React.createRef();
 let localStream;
 let remoteStream;
-function Video_connection({transcription_text, handleTranscriptStatus}){
+function Video_connection({transcription_text}) {
   const [micIcon, setMicIcon] = useState("unmute-icon");
   const [cameraIcon, setCameraIcon] = useState("camera-on-icon");
-  const [transcriptIcon, setTranscriptIcon] = useState("transcript-off-icon");
+  const [transcriptIcon, setTranscriptIcon] = useState("transcript-on-icon");
   const [iconDisabled, setIconDisabled] = useState("disabled");
   const [disabled, setdisabled] = useState(true);
   const [text, settext] = useState('');
@@ -212,11 +212,9 @@ function Video_connection({transcription_text, handleTranscriptStatus}){
   const toggleTranscript = async (event) => {
     if(transcriptIcon === "transcript-on-icon") {
       setTranscriptIcon("transcript-off-icon");
-      handleTranscriptStatus(event);
     }
     else {
       setTranscriptIcon("transcript-on-icon");
-      handleTranscriptStatus(event);
     }
   }
   useEffect(()=>{
@@ -227,7 +225,8 @@ function Video_connection({transcription_text, handleTranscriptStatus}){
   }, [transcription_text]);
 
   channel.onmessage = (event) => {
-    settext(event.data);
+    if(transcriptIcon === "transcript-on-icon")
+      settext(event.data);
   };
   return(
     <div className='videos_display'>
