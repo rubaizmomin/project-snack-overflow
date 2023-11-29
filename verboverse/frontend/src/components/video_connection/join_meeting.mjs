@@ -29,12 +29,10 @@ const firebaseConfig = {
       ],
       iceCandidatePoolSize: 10,
     };
-  
-const pc = new RTCPeerConnection(servers);
-
 let localStream;
 const callinput = React.createRef();
 const Join_meeting = () =>{
+    const meetingId = window.location.href.split("/")[4];
     const [micIcon, setMicIcon] = useState("unmute-icon");
     const [cameraIcon, setCameraIcon] = useState("camera-on-icon");
     const [iconDisabled, setIconDisabled] = useState("disabled");
