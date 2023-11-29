@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
 import { Route, Routes, useNavigate } from "react-router-dom";
+import { useEffect } from 'react';
+import classnames from 'classnames';
 import 'firebase/compat/firestore';
 import firebase from 'firebase/compat/app';
 const firebaseConfig = {
@@ -33,8 +35,10 @@ const pc = new RTCPeerConnection(servers);
 let localStream;
 const callinput = React.createRef();
 const Join_meeting = () =>{
-    const [mute, setmute] = useState("Mute");
-    const [video, setvideo] = useState("Hide");
+    const [micIcon, setMicIcon] = useState("unmute-icon");
+    const [cameraIcon, setCameraIcon] = useState("camera-on-icon");
+    const [iconDisabled, setIconDisabled] = useState("disabled");
+    const [pmsBtnDisabled, setPmsBtnDisabled] = useState("");
     const [disabled, setdisabled] = useState(true);
     const localvideo = React.createRef();
     const navigate = useNavigate();
@@ -43,12 +47,20 @@ const Join_meeting = () =>{
                                     audio: localStream.getTracks().find(track => track.kind === 'audio').enabled, 
                                     callId: callinput.current.value, privilege: "answer"}});
     }
+    useEffect(()=>{
+        const turnon = async () => {
+            localStream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
+        }
+        turnon();
+    }, []);
     const webcam = async () => {
         //get permissions for audio and video
-        localStream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
+        // localStream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
         // replace HTML with video feedback object
         localvideo.current.srcObject = localStream;
         setdisabled(false);
+        setIconDisabled("");
+        setPmsBtnDisabled("disabled");
     }
     const answermeeting = async () => {
         // get the callID that the invitee shared and access the data
@@ -70,32 +82,41 @@ const Join_meeting = () =>{
     const togglemute = () => {
         if(localStream.getTracks().find(track => track.kind === 'audio').enabled){
             localStream.getTracks().find(track => track.kind === 'audio').enabled = false;
-          setmute("Unmute")
+            setMicIcon("mute-icon");
         } else {
             localStream.getTracks().find(track => track.kind === 'audio').enabled = true;
-          setmute("Mute")
+            setMicIcon("unmute-icon");
         }
       }
     const togglevideo = () => {
         if(localStream.getTracks().find(track => track.kind === 'video').enabled){
             localStream.getTracks().find(track => track.kind === 'video').enabled = false;
-            setvideo("Show")
+            setCameraIcon("camera-off-icon");
         } else {
             localStream.getTracks().find(track => track.kind === 'video').enabled = true;
-            setvideo("Hide");
+            setCameraIcon("camera-on-icon");
         }
     }
     return(
-        <div>
-            <span>
-                <h3>Local Stream</h3>
+        <div className='videos_display'>
+            <h3>Video Preview</h3>
+            <div className='video_container'>
+                <p className='overlay_text'>Local Stream</p>
                 <video ref={localvideo} autoPlay playsInline muted="muted"></video>
-            </span>
-            <button onClick={webcam} >Video and Audio permissions</button>
-            <input ref={callinput}/>
-            <button onClick={answermeeting} disabled={disabled}>Join Meeting</button>
-            <button onClick={togglemute} disabled={disabled}>{mute}</button>
-            <button onClick={togglevideo} disabled={disabled}>{video}</button>
+            </div>
+            <div className='video_button_display'>
+                <button className={classnames("btn btn_blue", pmsBtnDisabled)} onClick={webcam}>Video and Audio permissions</button>
+                <button className="btn-action" onClick={togglemute} disabled={disabled}>
+                    <div className={classnames(micIcon, iconDisabled, "icon")}></div>
+                </button>
+                <button className="btn-action" onClick={togglevideo} disabled={disabled}>
+                    <div className={classnames(cameraIcon, iconDisabled, "icon")}></div>
+                </button>
+            </div>
+            <div className='video_button_display'>
+                <input placeholder="Enter meeting ID" ref={callinput} disabled={disabled}/>
+                <button className={classnames("btn btn_pink", iconDisabled)} onClick={answermeeting} disabled={disabled}>Join Meeting</button>
+            </div>
         </div>
     )
 }
