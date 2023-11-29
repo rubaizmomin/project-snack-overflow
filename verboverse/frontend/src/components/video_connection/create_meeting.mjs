@@ -24,23 +24,20 @@ const Create_meeting = () =>{
     const [mute, setmute] = useState("Mute");
     const [video, setvideo] = useState("Hide");
     const [disabled, setdisabled] = useState(true);
-    const [meetingdisabled, setmeetingdisabled] = useState(true);
-    const [callId, setcallId] = useState('');
     const localvideo = React.createRef();
     const navigate = useNavigate();
-    const sendemail = async () => {
-      const regex =  /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
-      const matched = emailinput.current.value.match(regex);
-      if(matched !== null){
-        setcallId(firestore.collection('calls').doc().id);
-        await sendEmail(emailinput.current.value, callId);
-        setmeetingdisabled(false);
-      }
-    }
-    const handleClick = () => {
-      navigate('/video', {state: {video: localStream.getTracks().find(track => track.kind === 'video').enabled, 
+    const handleClick = async () => {
+        const regex =  /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+        const matched = emailinput.current.value.match(regex);
+        if(matched !== null){
+            const callId = firestore.collection('calls').doc().id;
+            await sendEmail(emailinput.current.value, callId);
+            navigate('/video', {state: {video: localStream.getTracks().find(track => track.kind === 'video').enabled, 
                                                 audio: localStream.getTracks().find(track => track.kind === 'audio').enabled, 
                                                 callId: callId, privilege: "offer"}})
+        }
+        else
+            console.log("WRONG EMAIL");
     }
     const webcam = async () => {
         //get permissions for audio and video
@@ -74,9 +71,8 @@ const Create_meeting = () =>{
                 <video ref={localvideo} autoPlay playsInline muted="muted"></video>
             </span>
             <input ref={emailinput} />
-            <button onClick={sendemail} disabled={disabled}>Send Email</button>
             <button onClick={webcam} >Video and Audio permissions</button>
-            <button onClick={handleClick} disabled={meetingdisabled}>Create Meeting</button>
+            <button onClick={handleClick} disabled={disabled}>Create Meeting</button>
             <button onClick={togglemute} disabled={disabled}>{mute}</button>
             <button onClick={togglevideo} disabled={disabled}>{video}</button>
         </div>
