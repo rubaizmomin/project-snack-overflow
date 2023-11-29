@@ -5,6 +5,8 @@ import { useLocation } from 'react-router-dom';
 import { useEffect } from 'react';
 import {translate} from '../../services/translateApiService.js';
 
+import { sendEmail } from '../../services/sendGridApiService.js';
+
 const firebaseConfig = {
   apiKey: "AIzaSyDeiAhAi21ev36X-B0z9_sN4YexK7o1VY4",
   authDomain: "project-snack-overflow.firebaseapp.com",
@@ -89,6 +91,7 @@ function Video_connection({transcription_text}){
       remotevideo.current.srcObject = remoteStream;
       setdisabled(false);
     }
+
     const connectmeeting = async () => {
       // Create a New ID for a call
       if(data.state.privilege !== "offer")
