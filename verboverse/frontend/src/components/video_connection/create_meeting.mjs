@@ -67,7 +67,7 @@ const Create_meeting = () =>{
                 <video ref={localvideo} autoPlay playsInline muted="muted"></video>
             </div>
             <div className='video_button_display'>
-                <button className={classnames("btn btn_blue", pmsBtnDisabled)} onClick={webcam} disabled={!disabled}>Video and Audio permissions</button>
+                <button className={classnames("btn btn_blue", pmsBtnDisabled)} onClick={webcam}>Video and Audio permissions</button>
                 <button className="btn-action" onClick={togglemute} disabled={disabled}>
                     <div className={classnames(micIcon, iconDisabled, "icon")}></div>
                 </button>
