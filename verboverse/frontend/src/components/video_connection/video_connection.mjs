@@ -6,6 +6,8 @@ import { createCall, getCall, getCalls, addOfferCandidates, addOffer } from '../
 import 'firebase/compat/firestore';
 import { useLocation } from 'react-router-dom';
 import { useEffect } from 'react';
+import Transcript from '../transcript_display/speech_to_text_display.mjs';
+import { sendEmail } from '../../services/sendGridApiService.js';
 import {translate} from '../../services/translateApiService.js';
 
 import './meeting.css';
@@ -99,6 +101,7 @@ function Video_connection({transcription_text}) {
       setdisabled(false);
       setIconDisabled("");
     }
+
     const connectmeeting = async () => {
       // Create a New ID for a call
       if(data.state.privilege !== "offer")
