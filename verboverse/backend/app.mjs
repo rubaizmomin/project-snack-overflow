@@ -14,7 +14,6 @@ import {errorHandler} from './middleware/error.mjs';
 import {authRoutes} from './routes/authRoutes.mjs';
 import {memcacheRoutes} from './routes/memcacheRoutes.mjs';
 import {translateRoutes} from './routes/translateRoutes.mjs';
-import { sendgridRoutes } from './routes/sendgridRoutes.mjs';
 
 // enable cors
 app.use(cors());
@@ -39,7 +38,6 @@ app.use(cors());
 app.use('/api', authRoutes);
 app.use('/api/memcache', memcacheRoutes);
 app.use('/api/translate', translateRoutes);
-app.use('/api', sendgridRoutes);
 
 // ERROR HANDLER
 app.use(errorHandler);

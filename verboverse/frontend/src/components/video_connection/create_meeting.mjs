@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { Route, Routes, useNavigate } from "react-router-dom";
 import firebase from 'firebase/compat/app';
-import { sendEmail } from '../../services/sendGridApiService.js';
 const firebaseConfig = {
     apiKey: "AIzaSyDeiAhAi21ev36X-B0z9_sN4YexK7o1VY4",
     authDomain: "project-snack-overflow.firebaseapp.com",
@@ -17,30 +16,18 @@ const firebaseConfig = {
     firebase.initializeApp(firebaseConfig);
   }
   
-const firestore = firebase.firestore();
+  const firestore = firebase.firestore();
 let localStream;
-const emailinput = React.createRef();
 const Create_meeting = () =>{
     const [mute, setmute] = useState("Mute");
     const [video, setvideo] = useState("Hide");
     const [disabled, setdisabled] = useState(true);
-    const [meetingdisabled, setmeetingdisabled] = useState(true);
-    const [callId, setcallId] = useState('');
     const localvideo = React.createRef();
     const navigate = useNavigate();
-    const sendemail = async () => {
-      const regex =  /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
-      const matched = emailinput.current.value.match(regex);
-      if(matched !== null){
-        setcallId(firestore.collection('calls').doc().id);
-        await sendEmail(emailinput.current.value, callId);
-        setmeetingdisabled(false);
-      }
-    }
     const handleClick = () => {
-      navigate('/video', {state: {video: localStream.getTracks().find(track => track.kind === 'video').enabled, 
+        navigate('/video', {state: {video: localStream.getTracks().find(track => track.kind === 'video').enabled, 
                                                 audio: localStream.getTracks().find(track => track.kind === 'audio').enabled, 
-                                                callId: callId, privilege: "offer"}})
+                                                callId: firestore.collection('calls').doc().id, privilege: "offer"}})
     }
     const webcam = async () => {
         //get permissions for audio and video
@@ -73,10 +60,8 @@ const Create_meeting = () =>{
                 <h3>Local Stream</h3>
                 <video ref={localvideo} autoPlay playsInline muted="muted"></video>
             </span>
-            <input ref={emailinput} />
-            <button onClick={sendemail} disabled={disabled}>Send Email</button>
             <button onClick={webcam} >Video and Audio permissions</button>
-            <button onClick={handleClick} disabled={meetingdisabled}>Create Meeting</button>
+            <button onClick={handleClick} disabled={disabled}>Create Meeting</button>
             <button onClick={togglemute} disabled={disabled}>{mute}</button>
             <button onClick={togglevideo} disabled={disabled}>{video}</button>
         </div>
