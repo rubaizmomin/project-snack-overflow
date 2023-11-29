@@ -1,11 +1,14 @@
 import firebase from 'firebase/compat/app';
 import React, { useState } from 'react';
+import classnames from 'classnames';
 import { signup, login, logout, me } from '../../services/userApiService.js';
 import { createCall, getCall, getCalls, addOfferCandidates, addOffer } from '../../services/callApiService.js';
 import 'firebase/compat/firestore';
 import { useLocation } from 'react-router-dom';
 import { useEffect } from 'react';
 import Transcript from '../transcript_display/speech_to_text_display.mjs';
+import './meeting.css';
+
 const firebaseConfig = {
   apiKey: "AIzaSyDeiAhAi21ev36X-B0z9_sN4YexK7o1VY4",
   authDomain: "project-snack-overflow.firebaseapp.com",
@@ -47,9 +50,11 @@ const remotevideo = React.createRef();
 const textinput = React.createRef();
 let localStream;
 let remoteStream;
-function Video_connection({transcription_text}){
-  const [mute, setmute] = useState("Mute");
-  const [video, setvideo] = useState("Hide");
+function Video_connection({transcription_text}) {
+  const [micIcon, setMicIcon] = useState("unmute-icon");
+  const [cameraIcon, setCameraIcon] = useState("camera-on-icon");
+  const [transcriptIcon, setTranscriptIcon] = useState("transcript-on-icon");
+  const [iconDisabled, setIconDisabled] = useState("disabled");
   const [disabled, setdisabled] = useState(true);
   const [text, settext] = useState('');
   const data = useLocation();
@@ -59,15 +64,17 @@ function Video_connection({transcription_text}){
       localStream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
       localStream.getTracks().find(track => track.kind === 'audio').enabled = data.state.audio;
       localStream.getTracks().find(track => track.kind === 'video').enabled = data.state.video;
-      if(data.state.audio === true)
-        setmute("Mute");
-      else{
-        setmute("Unmute");
+      if(data.state.audio === true) {
+        setMicIcon("unmute-icon");
       }
-      if(data.state.video === true)
-        setvideo("Hide");
       else{
-        setvideo("Show");
+        setMicIcon("mute-icon");
+      }
+      if(data.state.video === true) {
+        setCameraIcon("camera-on-icon");
+      }
+      else{
+        setCameraIcon("camera-off-icon");
       }
       remoteStream = new MediaStream();
       // Push tracks from local stream to peer connection
@@ -84,6 +91,7 @@ function Video_connection({transcription_text}){
       localvideo.current.srcObject = localStream;
       remotevideo.current.srcObject = remoteStream;
       setdisabled(false);
+      setIconDisabled("");
     }
     const connectmeeting = async () => {
       // Create a New ID for a call
@@ -186,52 +194,74 @@ function Video_connection({transcription_text}){
   const togglemute = async () => {
     if(localStream.getTracks().find(track => track.kind === 'audio').enabled){
       localStream.getTracks().find(track => track.kind === 'audio').enabled = false;
-      setmute("Unmute")
+      setMicIcon("mute-icon");
     } else {
       localStream.getTracks().find(track => track.kind === 'audio').enabled = true;
-      setmute("Mute")
+      setMicIcon("unmute-icon");
     }
   }
   const togglevideo = async () => {
     if(localStream.getTracks().find(track => track.kind === 'video').enabled){
       localStream.getTracks().find(track => track.kind === 'video').enabled = false;
-      setvideo("Show")
+      setCameraIcon("camera-off-icon");
     } else {
       localStream.getTracks().find(track => track.kind === 'video').enabled = true;
-      setvideo("Hide");
+      setCameraIcon("camera-on-icon");
+    }
+  }
+  const toggleTranscript = async (event) => {
+    if(transcriptIcon === "transcript-on-icon") {
+      setTranscriptIcon("transcript-off-icon");
+    }
+    else {
+      setTranscriptIcon("transcript-on-icon");
     }
   }
   useEffect(()=>{
     if(channel.readyState === 'open'){
-      if(mute === "Mute")
+      if(micIcon === "unmute-icon") // audio is on
         channel.send(transcription_text);
     }
   }, [transcription_text]);
 
   channel.onmessage = (event) => {
-    settext(event.data);
+    if(transcriptIcon === "transcript-on-icon")
+      settext(event.data);
   };
   return(
-    <div>
-      <p>{data.state.callId}</p>
-      <span>
-        <h3>Remote Stream</h3>
-        <video ref={remotevideo} autoPlay playsInline></video>
-      </span>
-      <span>
-        <h3>Local Stream</h3>
-        <video ref={localvideo} autoPlay playsInline muted="muted"></video>
-      </span>
-      {/* <input ref={textinput}/> */}
-      <p>{text}</p>
-      {/* <button onClick={sendmessage} disabled={disabled}>Send</button> */}
-      <button onClick={togglemute} disabled={disabled}>{mute}</button>
-      <button onClick={togglevideo} disabled={disabled}>{video}</button>
+    <div className='videos_display'>
+      <h3>Meeting</h3>
+      <p>Meeting ID: {data.state.callId}</p>
+      <div className='videos_align_top'>
+        <div className='video_container'>
+          <video className='remote_video' ref={remotevideo} autoPlay playsInline></video>
+          <p className='overlay_text'>Remote Stream</p>
+          <p className='subtitle'>{text}</p>
+        </div>
+        <div className='video_container'>
+          <video className='local_video' ref={localvideo} autoPlay playsInline muted="muted"></video>
+          <p className='overlay_text'>Local Stream</p>
+        </div>
+      </div>
+      
+      <div className='video_button_display'>
+        <button className="btn-action" onClick={togglemute} disabled={disabled}>
+          <div className={classnames(micIcon, iconDisabled, "icon")}></div>
+        </button>
+        <button className="btn-action" onClick={togglevideo} disabled={disabled}>
+          <div className={classnames(cameraIcon, iconDisabled, "icon")}></div>
+        </button>
+        <button className="btn-action" onClick={toggleTranscript} disabled={disabled}>
+          <div className={classnames(transcriptIcon, iconDisabled, "icon")}></div>
+        </button>
+        <button className="btn-action">
+          <div className="hangup-icon icon"></div>
+        </button>
+      </div>
     </div>
-  )
+  );
 }
 export default Video_connection;
 
 
-  
   // Store, Fireship, director. WebRTC in 100 Seconds // Build a Video Chat App from Scratch. YouTube, 15 Mar. 2021, https://youtu.be/WmR9IMUD_CY?si=z1dGNkAm6VpOEPtd. Accessed 12 Nov. 2023. 

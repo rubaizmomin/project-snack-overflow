@@ -8,7 +8,7 @@ recognition.interimResults = true;
 
 var recognizing = false;
 var finalTranscript = '';
-var ignore_onend;
+let ignore_onend;
 var start_timestamp;
 var languageChosen = 'en-CA';
 
@@ -16,7 +16,6 @@ function Transcript() {
   const [info, setInfo] = useState('Off');
   const [interimSpan, setInterimSpan] = useState('');
   const [finalSpan, setFinalSpan] = useState('');
-
   useEffect(() => {
     recognition.onstart = function() {
       recognizing = true;
@@ -24,14 +23,13 @@ function Transcript() {
     
     recognition.onerror = function(event) {
       if (event.error === 'no-speech') {
-        setInfo('Error: No speech');
         ignore_onend = true;
       }
-      if (event.error === 'audio-capture') {
+      else if (event.error === 'audio-capture') {
         setInfo('Error: No microphone');
         ignore_onend = true;
       }
-      if (event.error === 'not-allowed') {
+      else if (event.error === 'not-allowed') {
         if (event.timeStamp - start_timestamp < 100) {
           setInfo('Error: Blocked');
         } else {
@@ -42,10 +40,11 @@ function Transcript() {
     };
     
     recognition.onend = function() {
-      recognizing = false;
-      if (ignore_onend) {
+      if (ignore_onend || ignore_onend === undefined) {
+        recognition.start();
         return;
       }
+      recognizing = false;
       setInfo('Off');
     };
     
@@ -63,31 +62,18 @@ function Transcript() {
       setInterimSpan(linebreak(interimTranscript));
     };
   });
-
-  const showTranscript = async (event) => {
-    if (recognizing) {
-      recognition.stop();
-      return;
-    }
-    finalTranscript = '';
-    recognition.lang = languageChosen;
+  useEffect(()=>{
     recognition.start();
-    ignore_onend = false;
-    setFinalSpan('');
-    setInterimSpan('');
-    setInfo('On');
-    start_timestamp = event.timeStamp;
-  };
+  }, []);
 
   return(
     <div id="results">
-      <Video_connection transcription_text={interimSpan}/>
+      <Video_connection transcription_text={interimSpan} />
       <p>Transcript 
-        <span id="info"> ({info}):<br /></span>
+        {/* <span id="info"> ({info}):<br /></span> */}
         <span id="finalSpan" style={{color:'black'}}>{finalSpan}</span>
-        <span id="interimSpan" style={{color:'blue'}}>{interimSpan}</span>
+        {/* <span id="interimSpan" style={{color:'blue'}}>{interimSpan}</span> */}
       </p>
-      <button id="transcriptButton" onClick={showTranscript}>Show/Hide Transcript</button>
     </div>
   );
 }
