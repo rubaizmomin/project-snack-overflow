@@ -12,6 +12,7 @@ import {errorHandler} from './middleware/error.mjs';
 
 // import routes
 import {authRoutes} from './routes/authRoutes.mjs';
+import { sendgridRoutes } from './routes/sendgridRoutes.mjs';
 import {memcacheRoutes} from './routes/memcacheRoutes.mjs';
 import {translateRoutes} from './routes/translateRoutes.mjs';
 
@@ -36,6 +37,7 @@ app.use(cors());
 
 // ROUTES MIDDLEWARE
 app.use('/api', authRoutes);
+app.use('/api', sendgridRoutes);
 app.use('/api/memcache', memcacheRoutes);
 app.use('/api/translate', translateRoutes);
 
