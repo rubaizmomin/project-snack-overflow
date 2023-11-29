@@ -32,7 +32,6 @@ const firebaseConfig = {
 let localStream;
 const callinput = React.createRef();
 const Join_meeting = () =>{
-    const meetingId = window.location.href.split("/")[4];
     const [micIcon, setMicIcon] = useState("unmute-icon");
     const [cameraIcon, setCameraIcon] = useState("camera-on-icon");
     const [iconDisabled, setIconDisabled] = useState("disabled");
@@ -50,6 +49,8 @@ const Join_meeting = () =>{
             localStream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
         }
         turnon();
+        const meetingId = window.location.href.split("/")[4];
+        callinput.current.value = meetingId;
     }, []);
     const webcam = async () => {
         //get permissions for audio and video
