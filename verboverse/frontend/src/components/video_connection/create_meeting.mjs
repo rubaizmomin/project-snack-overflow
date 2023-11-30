@@ -90,7 +90,7 @@ const Create_meeting = () =>{
 
             </div>
             <div className='video_button_display'>
-                <input ref={emailinput} />
+                <input ref={emailinput} placeholder="Enter the invitee's email to create meeting" />
                 {/* <button className={classnames("btn btn_blue", pmsBtnDisabled)} onClick={webcam}>Video and Audio permissions</button> */}
                 <button className="btn-action" onClick={togglemute} disabled={disabled}>
                     <div className={classnames(micIcon, iconDisabled, "icon")}></div>

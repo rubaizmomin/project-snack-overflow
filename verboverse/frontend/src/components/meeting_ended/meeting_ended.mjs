@@ -18,8 +18,8 @@ const Meeting_ended = () =>{
     }
     return(
         <div>
-            <button onClick={gotohome}>Home Page</button>
-            <p>{data.state.privilege} Ended the Meetinb</p>
+            <h4>{data.state.privilege} Ended the Meeting</h4>
+            <button className="btn btn_pink small_btn" onClick={gotohome}>Home Page</button>
         </div>
     )
 }
