@@ -52,7 +52,7 @@ let localStream;
 let remoteStream;
 let target = "fr";
 
-function Video_connection({transcription_text}) {
+function Video_connection({transcription_text, recognition}) {
   const [micIcon, setMicIcon] = useState("unmute-icon");
   const [cameraIcon, setCameraIcon] = useState("camera-on-icon");
   const [transcriptIcon, setTranscriptIcon] = useState("transcript-on-icon");
@@ -224,8 +224,8 @@ function Video_connection({transcription_text}) {
     if(hangupchannel.readyState === 'open'){
       hangupchannel.send(data.state.privilege);
     }
+    recognition.stop();
     pc.close();
-    localStream.getTracks()
     localStream.getTracks().forEach(function(track) {
       track.stop();
     });
