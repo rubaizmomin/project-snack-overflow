@@ -1,9 +1,15 @@
 import { useLocation } from "react-router-dom";
 import { useEffect } from "react";
 const Meeting_ended = () =>{
-    useEffect(()=>{
-        window.location.reload();
-    }, []);
+    // useEffect(() =>{
+    //     const reloadCount = sessionStorage.getItem('reloadCount');
+    //     if(reloadCount < 2) {
+    //       sessionStorage.setItem('reloadCount', String(reloadCount + 1));
+    //       window.location.reload();
+    //     } else {
+    //       sessionStorage.removeItem('reloadCount');
+    //     }
+    // }, []);
     const data = useLocation();
     return(
         <div>
