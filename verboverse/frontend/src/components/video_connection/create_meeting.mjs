@@ -19,8 +19,8 @@ const firebaseConfig = {
   }
   
 const firestore = firebase.firestore();
-let localStream;
 const emailinput = React.createRef();
+let localStream;
 const Create_meeting = () =>{
     const [micIcon, setMicIcon] = useState("unmute-icon");
     const [cameraIcon, setCameraIcon] = useState("camera-on-icon");
@@ -42,16 +42,10 @@ const Create_meeting = () =>{
         else
             console.log("WRONG EMAIL");
     }
-    useEffect(()=>{
-        const turnon = async () => {
-            localStream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
-        }
-        turnon();
-    }, []);
     const webcam = async () => {
         //get permissions for audio and video
         // replace HTML with video feedback object
-        // localStream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
+        localStream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
         localvideo.current.srcObject = localStream;
         setdisabled(false);
         setIconDisabled("");
