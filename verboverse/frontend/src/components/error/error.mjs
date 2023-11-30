@@ -1,10 +1,11 @@
 import { useLocation } from "react-router-dom";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-const Meeting_ended = () =>{
+const Error = () =>{
+    const [error, seterror] = useState('');
     useEffect(() =>{
         const reloadCount = sessionStorage.getItem('reloadCount');
-        if(reloadCount < 2) {
+        if(reloadCount < 1) {
           sessionStorage.setItem('reloadCount', String(reloadCount + 1));
           window.location.reload();
         } else {
@@ -16,12 +17,14 @@ const Meeting_ended = () =>{
     const gotohome = () => {
         navigate('/');
     }
+    if(data.state !== null)
+        seterror(data.state.error)
     return(
         <div>
             <button onClick={gotohome}>Home Page</button>
-            <p>{data.state.privilege} Ended the Meetinb</p>
+            <p>{error}</p>
         </div>
     )
 }
 
-export default Meeting_ended;
+export default Error;

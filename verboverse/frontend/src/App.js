@@ -7,6 +7,7 @@ import Homepage from './components/home_page/home_page.mjs';
 import Create_meeting from './components/video_connection/create_meeting.mjs';
 import Join_meeting from './components/video_connection/join_meeting.mjs';
 import Meeting_ended from './components/meeting_ended/meeting_ended.mjs';
+import Error from './components/error/error.mjs';
 function App() {
   return (
     <div className="App">
@@ -19,6 +20,7 @@ function App() {
           <Route path='/join/' element={<Join_meeting />} />
           <Route path='/video' element={<Transcript />} />
           <Route path='/meetingend/*' element={<Meeting_ended />} />
+          <Route path='/error' element={<Error />} />
         </Routes>
     </div>
   );
