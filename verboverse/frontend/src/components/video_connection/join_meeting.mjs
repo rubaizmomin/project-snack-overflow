@@ -49,7 +49,7 @@ const Join_meeting = () =>{
             localStream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
         }
         turnon();
-        const meetingId = window.location.href.split("/")[4];
+        let meetingId = window.location.href.split("/")[4];
         if(meetingId === undefined)
             meetingId = "";
         callinput.current.value = meetingId;

@@ -9,7 +9,7 @@ import { useEffect } from 'react';
 import Transcript from '../transcript_display/speech_to_text_display.mjs';
 import { sendEmail } from '../../services/sendGridApiService.js';
 import {translate} from '../../services/translateApiService.js';
-
+import Chat from '../chat/chat.mjs';
 import './meeting.css';
 
 const firebaseConfig = {
@@ -47,7 +47,7 @@ const servers = {
 
 const pc = new RTCPeerConnection(servers);
 const channel = pc.createDataChannel("chat", { negotiated: true, id: 0 });
-
+const chatchannel = pc.createDataChannel("chat", { negotiated: true, id: 2 });
 const localvideo = React.createRef();
 const remotevideo = React.createRef();
 const textinput = React.createRef();
@@ -269,6 +269,7 @@ function Video_connection({transcription_text}) {
           <div className="hangup-icon icon"></div>
         </button>
       </div>
+      <Chat channel={chatchannel}/>
     </div>
   );
 }
