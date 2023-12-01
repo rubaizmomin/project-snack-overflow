@@ -53,9 +53,8 @@ const remotevideo = React.createRef();
 const textinput = React.createRef();
 let localStream;
 let remoteStream;
-let target = "fr";
-
 function Video_connection({transcription_text}) {
+  const target = 'fr';
   const [micIcon, setMicIcon] = useState("unmute-icon");
   const [cameraIcon, setCameraIcon] = useState("camera-on-icon");
   const [transcriptIcon, setTranscriptIcon] = useState("transcript-on-icon");
@@ -269,7 +268,7 @@ function Video_connection({transcription_text}) {
           <div className="hangup-icon icon"></div>
         </button>
       </div>
-      <Chat channel={chatchannel}/>
+      <Chat channel={chatchannel} targetlanguage={target}/>
     </div>
   );
 }

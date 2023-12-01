@@ -42,16 +42,10 @@ const Create_meeting = () =>{
         else
             console.log("NOT AN EMAIL OR NOT REGISTERED");
     }
-    useEffect(()=>{
-        const turnon = async () => {
-            localStream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
-        }
-        turnon();
-    }, []);
     const webcam = async () => {
         //get permissions for audio and video
         // replace HTML with video feedback object
-        // localStream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
+        localStream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
         localvideo.current.srcObject = localStream;
         setdisabled(false);
         setIconDisabled("");

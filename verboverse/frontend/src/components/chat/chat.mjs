@@ -1,8 +1,12 @@
-import { useEffect } from "react";
-import React from "react";
+import React, { useEffect, useState } from "react";
+import {translate} from '../../services/translateApiService.js';
 const messageinput = React.createRef();
-const Chat = ({channel}) =>{
+const Chat = ({channel, targetlanguage}) =>{
+    const [disabled, setdisabled] = useState(true);
     const chatchannel = channel;
+    chatchannel.onopen = () => {
+        setdisabled(false);
+    }
     const sendmessage = () => {
         if(chatchannel.readyState === 'open'){
             const messageinfo={
@@ -30,7 +34,6 @@ const Chat = ({channel}) =>{
     }
     chatchannel.onmessage = (event) =>{
         const messageinfo = JSON.parse(event.data);
-
         const MessageInfodiv = document.createElement("div");
         MessageInfodiv.className = "MessageInfo";
 
@@ -41,17 +44,19 @@ const Chat = ({channel}) =>{
 
         const theirMessagediv = document.createElement("div");
         theirMessagediv.className = "TheirMessage";
-        theirMessagediv.innerHTML = messageinfo.message;
-        MessageInfodiv.appendChild(theirMessagediv);
-
-        document.getElementById("Chat").appendChild(MessageInfodiv);        
+        translate(messageinfo.message, targetlanguage).then((translatedmessage)=>{
+            theirMessagediv.innerHTML = translatedmessage.translation;
+            MessageInfodiv.appendChild(theirMessagediv);
+            document.getElementById("Chat").appendChild(MessageInfodiv);   
+        })
+     
     }
     return(
         <div>
             <div className="Chat" id="Chat">
             </div>
             <input placeholder="Enter message" ref={messageinput}/>
-            <button onClick={sendmessage}>Send</button>
+            <button onClick={sendmessage} disabled={disabled}>Send</button>
         </div>
     )
 }
