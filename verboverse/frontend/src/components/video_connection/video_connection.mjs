@@ -7,7 +7,7 @@ import 'firebase/compat/firestore';
 import { useLocation } from 'react-router-dom';
 import { useEffect } from 'react';
 import {translate} from '../../services/translateApiService.js';
-import { useNavigate } from 'react-router-dom';
+import Chat from '../chat/chat.mjs';import { useNavigate } from 'react-router-dom';
 import './meeting.css';
 const firebaseConfig = {
   apiKey: "AIzaSyDeiAhAi21ev36X-B0z9_sN4YexK7o1VY4",
@@ -45,13 +45,13 @@ const servers = {
 const pc = new RTCPeerConnection(servers);
 const channel = pc.createDataChannel("chat", { negotiated: true, id: 0 });
 const hangupchannel = pc.createDataChannel("chat", { negotiated: true, id: 1 });
+const chatchannel = pc.createDataChannel("chat", { negotiated: true, id: 2 });
 const localvideo = React.createRef();
 const remotevideo = React.createRef();
 let localStream;
 let remoteStream;
-let target = "fr";
-
 function Video_connection({transcription_text, recognition}) {
+  const target = 'fr';
   const [micIcon, setMicIcon] = useState("unmute-icon");
   const [cameraIcon, setCameraIcon] = useState("camera-on-icon");
   const [transcriptIcon, setTranscriptIcon] = useState("transcript-on-icon");
@@ -239,6 +239,9 @@ function Video_connection({transcription_text, recognition}) {
       hangupchannel.send(data.state.privilege);
     }
     recognition.stop();
+    channel.close();
+    hangupchannel.close();
+    chatchannel.close();
     pc.close();
     localStream.getTracks().forEach(function(track) {
       track.stop();
@@ -313,6 +316,7 @@ function Video_connection({transcription_text, recognition}) {
           <div className="hangup-icon icon" onClick={hangup} disabled={disabled}></div>
         </button>
       </div>
+      <Chat channel={chatchannel} targetlanguage={target}/>
     </div>
   );
 }
