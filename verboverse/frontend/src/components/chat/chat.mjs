@@ -8,6 +8,8 @@ const Chat = ({channel, targetlanguage}) =>{
         setdisabled(false);
     }
     const sendmessage = () => {
+        if(messageinput.current.value === '')
+            return;
         if(chatchannel.readyState === 'open'){
             const messageinfo={
                 username: "The other side: ",

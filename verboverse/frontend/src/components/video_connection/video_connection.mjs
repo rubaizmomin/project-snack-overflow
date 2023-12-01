@@ -6,12 +6,9 @@ import { createCall, getCall, getCalls, addOfferCandidates, addOffer } from '../
 import 'firebase/compat/firestore';
 import { useLocation } from 'react-router-dom';
 import { useEffect } from 'react';
-import Transcript from '../transcript_display/speech_to_text_display.mjs';
-import { sendEmail } from '../../services/sendGridApiService.js';
 import {translate} from '../../services/translateApiService.js';
-import Chat from '../chat/chat.mjs';
+import Chat from '../chat/chat.mjs';import { useNavigate } from 'react-router-dom';
 import './meeting.css';
-
 const firebaseConfig = {
   apiKey: "AIzaSyDeiAhAi21ev36X-B0z9_sN4YexK7o1VY4",
   authDomain: "project-snack-overflow.firebaseapp.com",
@@ -47,13 +44,13 @@ const servers = {
 
 const pc = new RTCPeerConnection(servers);
 const channel = pc.createDataChannel("chat", { negotiated: true, id: 0 });
+const hangupchannel = pc.createDataChannel("chat", { negotiated: true, id: 1 });
 const chatchannel = pc.createDataChannel("chat", { negotiated: true, id: 2 });
 const localvideo = React.createRef();
 const remotevideo = React.createRef();
-const textinput = React.createRef();
 let localStream;
 let remoteStream;
-function Video_connection({transcription_text}) {
+function Video_connection({transcription_text, recognition}) {
   const target = 'fr';
   const [micIcon, setMicIcon] = useState("unmute-icon");
   const [cameraIcon, setCameraIcon] = useState("camera-on-icon");
@@ -61,11 +58,10 @@ function Video_connection({transcription_text}) {
   const [iconDisabled, setIconDisabled] = useState("disabled");
   const [disabled, setdisabled] = useState(true);
   const [text, settext] = useState('');
+  let error = '';
+  const meetingId = window.location.href.split("/")[4];
   const data = useLocation();
-  // replace HTML with video feedback object
-  // const appendTranslatedText = (newtext) => {
-  //   settext(text + newtext);
-  // }
+  const navigate = useNavigate();
   useEffect(() => {
     const webcam_on = async () => {
       localStream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
@@ -105,7 +101,7 @@ function Video_connection({transcription_text}) {
       // Create a New ID for a call
       if(data.state.privilege !== "offer")
         return;
-      const callDoc = firestore.collection('calls').doc(data.state.callId);
+      const callDoc = firestore.collection('calls').doc(meetingId);
       // Create new collection
       const offerCandidates = callDoc.collection('offerCandidates');
       const answerCandidates = callDoc.collection('answerCandidates');
@@ -152,8 +148,7 @@ function Video_connection({transcription_text}) {
       // get the callID that the invitee shared and access the data
       if(data.state.privilege !== "answer")
         return;
-      const callId = data.state.callId;
-      const callDoc = firestore.collection('calls').doc(callId);
+      const callDoc = firestore.collection('calls').doc(meetingId);
       const offerCandidates = callDoc.collection('offerCandidates');
       const answerCandidates = callDoc.collection('answerCandidates');
     
@@ -193,11 +188,25 @@ function Video_connection({transcription_text}) {
         });
       });
     }
+    const checksecurity = async () =>{
+      if(!((await firestore.collection('calls').doc(meetingId).get()).exists)){
+        error = "The meeting does not exist.";
+        throw new Error();
+      }
+      if(((await firestore.collection('calls').doc(meetingId).get()).data().answer) !== undefined){
+        error = "You cannot join the meeting again. Please do not refresh the ongoing meeting."
+        throw new Error();
+      }
+    }
+    checksecurity().catch((e)=>{
+      navigate('/error', {state: {errormessage:error}});
+      return;
+    });
     webcam_on().then(()=>{
       connectmeeting().then(() => {
         answermeeting();
       })
-    })
+    });
   }, []); // Empty dependency array means this effect will run only once, on component mount
   const togglemute = async () => {
     if(localStream.getTracks().find(track => track.kind === 'audio').enabled){
@@ -225,12 +234,51 @@ function Video_connection({transcription_text}) {
       setTranscriptIcon("transcript-on-icon");
     }
   }
+  const hangup = async () =>{
+    if(hangupchannel.readyState === 'open'){
+      hangupchannel.send(data.state.privilege);
+    }
+    recognition.stop();
+    channel.close();
+    hangupchannel.close();
+    chatchannel.close();
+    pc.close();
+    localStream.getTracks().forEach(function(track) {
+      track.stop();
+    });
+    remoteStream.getTracks().forEach(function(track) {
+      track.stop();
+    });
+    localvideo.current.srcObject = null;
+    remotevideo.current.srcObject = null;
+    navigate(`/meetingend/${data.state.callId}`, {state: {privilege: "You"}})
+  }
+
   useEffect(()=>{
     if(channel.readyState === 'open'){
       if(micIcon === "unmute-icon") // audio is on
         channel.send(transcription_text);
     }
   }, [transcription_text]);
+
+  hangupchannel.onmessage = (event) => {
+    pc.close();
+    localStream.getTracks()
+    localStream.getTracks().forEach(function(track) {
+      track.stop();
+    });
+    remoteStream.getTracks().forEach(function(track) {
+      track.stop();
+    });
+    localvideo.current.srcObject = null;
+    remotevideo.current.srcObject = null;
+    let deleter;
+    if(event.data === "offer")
+      deleter = "The Host";
+    else
+      deleter = "The Answerer"
+    navigate(`/meetingend/${data.state.callId}`, {state: {privilege: deleter}})
+  }
 
   channel.onmessage = async (event) => {
     if(transcriptIcon === "transcript-on-icon"){
@@ -241,7 +289,7 @@ function Video_connection({transcription_text}) {
   return(
     <div className='videos_display'>
       <h3>Meeting</h3>
-      <p>Meeting ID: {data.state.callId}</p>
+      <p>Meeting ID: {meetingId}</p>
       <div className='videos_align_top'>
         <div className='video_container'>
           <video className='remote_video' ref={remotevideo} autoPlay playsInline></video>
@@ -265,7 +313,7 @@ function Video_connection({transcription_text}) {
           <div className={classnames(transcriptIcon, iconDisabled, "icon")}></div>
         </button>
         <button className="btn-action">
-          <div className="hangup-icon icon"></div>
+          <div className="hangup-icon icon" onClick={hangup} disabled={disabled}></div>
         </button>
       </div>
       <Chat channel={chatchannel} targetlanguage={target}/>

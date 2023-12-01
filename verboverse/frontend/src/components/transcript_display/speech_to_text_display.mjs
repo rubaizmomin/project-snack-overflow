@@ -68,10 +68,10 @@ function Transcript() {
 
   return(
     <div id="results">
-      <Video_connection transcription_text={interimSpan} />
+      <Video_connection transcription_text={interimSpan} recognition={recognition}/>
       <p>Transcript 
         {/* <span id="info"> ({info}):<br /></span> */}
-        <span id="finalSpan" style={{color:'black'}}>{finalSpan}</span>
+        {/* <span id="finalSpan" style={{color:'black'}}>{finalSpan}</span> */}
         {/* <span id="interimSpan" style={{color:'blue'}}>{interimSpan}</span> */}
       </p>
     </div>

@@ -34,6 +34,7 @@ const Create_meeting = () =>{
         const matched = emailinput.current.value.match(regex);
         if(matched !== null){
             const callId = firestore.collection('calls').doc().id;
+            (await firestore.collection('calls').doc(callId).set({created: true}));
             await sendEmail(emailinput.current.value, callId);
             navigate(`/meeting/${callId}`, {state: {video: localStream.getTracks().find(track => track.kind === 'video').enabled, 
                                                 audio: localStream.getTracks().find(track => track.kind === 'audio').enabled, 
@@ -42,6 +43,7 @@ const Create_meeting = () =>{
         else
             console.log("NOT AN EMAIL OR NOT REGISTERED");
     }
+    
     const webcam = async () => {
         //get permissions for audio and video
         // replace HTML with video feedback object
@@ -78,7 +80,7 @@ const Create_meeting = () =>{
 
             </div>
             <div className='video_button_display'>
-                <input ref={emailinput} />
+                <input ref={emailinput} placeholder="Enter the invitee's email to create meeting" />
                 <button className={classnames("btn btn_blue", pmsBtnDisabled)} onClick={webcam}>Video and Audio permissions</button>
                 <button className="btn-action" onClick={togglemute} disabled={disabled}>
                     <div className={classnames(micIcon, iconDisabled, "icon")}></div>
