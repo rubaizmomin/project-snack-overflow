@@ -6,3 +6,8 @@
   border-radius: 7%;
   border-style: solid none;
 }
+
+#language_select {
+  display: flex;
+  flex-direction: row;
+}

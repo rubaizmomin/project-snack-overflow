@@ -61,16 +61,17 @@ const AccountProfile = () => {
                     <ModalClose />
                     <Divider sx={{ mt: 'auto' }} />
                     <DialogContent sx={{ gap: 2 }}>
-                        <Typography align="left" level="title-md" fontWeight="bold" sx={{ mt: 1 }}>
+                        <Typography align="left" level="title-md" fontWeight="bold" sx={{ mt: 1, mr: 1 }}>
                             Username:
                         </Typography>
-                        <Typography align="left" level="title-md" fontWeight="bold" sx={{ mt: 1 }}>
+                        <Typography align="left" level="title-md" fontWeight="bold" sx={{ mt: 1, mr: 1 }}>
                             Email:
                         </Typography>
-                        <Typography align="left" level="title-md" fontWeight="bold" sx={{ mt: 1 }}>
+                        <div id="language_select">
+                        <Typography align="left" level="title-md" fontWeight="bold" sx={{ mt: 1, mr: 1 }}>
                             Primary Language:
                         </Typography>
-                        <div>
+                        
                             <Button
                                 ref={buttonRef}
                                 id="composition-button"
