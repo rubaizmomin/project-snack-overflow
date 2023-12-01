@@ -17,8 +17,8 @@ function App() {
           <Route exact path='/' element={<Homepage />} />
           <Route path='/home' element={<Homepage />} />
           <Route path='/create/' element={<Create_meeting />} />
-          <Route path='/join/' element={<Join_meeting />} />
-          <Route path='/video' element={<Transcript />} />
+          <Route path='/join/*' element={<Join_meeting />} />
+          <Route path='/meeting/*' element={<Transcript />} />
           <Route path='/meetingend/*' element={<Meeting_ended />} />
           <Route path='/error' element={<Error />} />
         </Routes>
