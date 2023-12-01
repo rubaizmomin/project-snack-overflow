@@ -2,7 +2,6 @@ import { useLocation } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 const Error = () =>{
-    const [error, seterror] = useState('');
     useEffect(() =>{
         const reloadCount = sessionStorage.getItem('reloadCount');
         if(reloadCount < 1) {
@@ -17,8 +16,7 @@ const Error = () =>{
     const gotohome = () => {
         navigate('/');
     }
-    if(data.state !== null)
-        seterror(data.state.error)
+    const error = data.state.errormessage;
     return(
         <div>
             <button onClick={gotohome}>Home Page</button>

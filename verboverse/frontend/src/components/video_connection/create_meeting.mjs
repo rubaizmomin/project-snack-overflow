@@ -34,6 +34,7 @@ const Create_meeting = () =>{
         const matched = emailinput.current.value.match(regex);
         if(matched !== null){
             const callId = firestore.collection('calls').doc().id;
+            (await firestore.collection('calls').doc(callId).set({created: true}));
             await sendEmail(emailinput.current.value, callId);
             navigate(`/meeting/${callId}`, {state: {video: localStream.getTracks().find(track => track.kind === 'video').enabled, 
                                                 audio: localStream.getTracks().find(track => track.kind === 'audio').enabled, 

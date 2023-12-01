@@ -9,7 +9,6 @@ import { useEffect } from 'react';
 import {translate} from '../../services/translateApiService.js';
 import { useNavigate } from 'react-router-dom';
 import './meeting.css';
-
 const firebaseConfig = {
   apiKey: "AIzaSyDeiAhAi21ev36X-B0z9_sN4YexK7o1VY4",
   authDomain: "project-snack-overflow.firebaseapp.com",
@@ -59,6 +58,8 @@ function Video_connection({transcription_text, recognition}) {
   const [iconDisabled, setIconDisabled] = useState("disabled");
   const [disabled, setdisabled] = useState(true);
   const [text, settext] = useState('');
+  let error = '';
+  const meetingId = window.location.href.split("/")[4];
   const data = useLocation();
   const navigate = useNavigate();
   useEffect(() => {
@@ -100,7 +101,7 @@ function Video_connection({transcription_text, recognition}) {
       // Create a New ID for a call
       if(data.state.privilege !== "offer")
         return;
-      const callDoc = firestore.collection('calls').doc(data.state.callId);
+      const callDoc = firestore.collection('calls').doc(meetingId);
       // Create new collection
       const offerCandidates = callDoc.collection('offerCandidates');
       const answerCandidates = callDoc.collection('answerCandidates');
@@ -147,8 +148,7 @@ function Video_connection({transcription_text, recognition}) {
       // get the callID that the invitee shared and access the data
       if(data.state.privilege !== "answer")
         return;
-      const callId = data.state.callId;
-      const callDoc = firestore.collection('calls').doc(callId);
+      const callDoc = firestore.collection('calls').doc(meetingId);
       const offerCandidates = callDoc.collection('offerCandidates');
       const answerCandidates = callDoc.collection('answerCandidates');
     
@@ -188,11 +188,25 @@ function Video_connection({transcription_text, recognition}) {
         });
       });
     }
+    const checksecurity = async () =>{
+      if(!((await firestore.collection('calls').doc(meetingId).get()).exists)){
+        error = "The meeting does not exist.";
+        throw new Error();
+      }
+      if(((await firestore.collection('calls').doc(meetingId).get()).data().answer) !== undefined){
+        error = "You cannot join the meeting again. Please do not refresh the ongoing meeting."
+        throw new Error();
+      }
+    }
+    checksecurity().catch((e)=>{
+      navigate('/error', {state: {errormessage:error}});
+      return;
+    });
     webcam_on().then(()=>{
       connectmeeting().then(() => {
         answermeeting();
       })
-    })
+    });
   }, []); // Empty dependency array means this effect will run only once, on component mount
   const togglemute = async () => {
     if(localStream.getTracks().find(track => track.kind === 'audio').enabled){
@@ -234,7 +248,6 @@ function Video_connection({transcription_text, recognition}) {
     });
     localvideo.current.srcObject = null;
     remotevideo.current.srcObject = null;
-    await firestore.collection('calls').doc(data.state.callId).delete();
     navigate(`/meetingend/${data.state.callId}`, {state: {privilege: "You"}})
   }
 
@@ -273,7 +286,7 @@ function Video_connection({transcription_text, recognition}) {
   return(
     <div className='videos_display'>
       <h3>Meeting</h3>
-      <p>Meeting ID: {data.state.callId}</p>
+      <p>Meeting ID: {meetingId}</p>
       <div className='videos_align_top'>
         <div className='video_container'>
           <video className='remote_video' ref={remotevideo} autoPlay playsInline></video>
