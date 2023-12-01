@@ -29,17 +29,6 @@ const Create_meeting = () =>{
     const [disabled, setdisabled] = useState(true);
     const localvideo = React.createRef();
     const navigate = useNavigate();
-    useEffect(()=>{
-        navigator.mediaDevices.getUserMedia({ video: true, audio: true }).then((ls)=>{
-            localStream = ls;
-            localvideo.current.srcObject = localStream;
-            setdisabled(false);
-            setIconDisabled("");
-            setPmsBtnDisabled("disabled");
-        }).catch((err)=>{
-            console.log("PLEASE PROVIDE ACCESS TO VIDEO AND AUDIO PERMISSIONS");
-        })
-    }, []);
     const handleClick = async () => {
         const regex =  /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
         const matched = emailinput.current.value.match(regex);
@@ -54,15 +43,15 @@ const Create_meeting = () =>{
             console.log("WRONG EMAIL");
     }
     
-    // const webcam = async () => {
-    //     //get permissions for audio and video
-    //     // replace HTML with video feedback object
-    //     localStream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
-    //     localvideo.current.srcObject = localStream;
-    //     setdisabled(false);
-    //     setIconDisabled("");
-    //     setPmsBtnDisabled("disabled");
-    // }
+    const webcam = async () => {
+        //get permissions for audio and video
+        // replace HTML with video feedback object
+        localStream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
+        localvideo.current.srcObject = localStream;
+        setdisabled(false);
+        setIconDisabled("");
+        setPmsBtnDisabled("disabled");
+    }
     const togglemute = () => {
         if(localStream.getTracks().find(track => track.kind === 'audio').enabled){
           localStream.getTracks().find(track => track.kind === 'audio').enabled = false;

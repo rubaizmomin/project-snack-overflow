@@ -42,31 +42,20 @@ const Join_meeting = () =>{
     const [disabled, setdisabled] = useState(true);
     const localvideo = React.createRef();
     const navigate = useNavigate();
-    useEffect(()=>{
-        navigator.mediaDevices.getUserMedia({ video: true, audio: true }).then((ls)=>{
-            localStream = ls;
-            localvideo.current.srcObject = localStream;
-            setdisabled(false);
-            setIconDisabled("");
-            setPmsBtnDisabled("disabled");
-        }).catch((err)=>{
-           console.log("PLEASE PROVIDE ACCESS TO VIDEO AND AUDIO PERMISSIONS");
-        })
-    }, []);
     const handleClick = () => {
         navigate('/video', {state: {video: localStream.getTracks().find(track => track.kind === 'video').enabled, 
                                     audio: localStream.getTracks().find(track => track.kind === 'audio').enabled, 
                                     callId: callinput.current.value, privilege: "answer"}});
     }
-    // const webcam = async () => {
-    //     //get permissions for audio and video
-    //     localStream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
-    //     // replace HTML with video feedback object
-    //     localvideo.current.srcObject = localStream;
-    //     setdisabled(false);
-    //     setIconDisabled("");
-    //     setPmsBtnDisabled("disabled");
-    // }
+    const webcam = async () => {
+        //get permissions for audio and video
+        localStream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
+        // replace HTML with video feedback object
+        localvideo.current.srcObject = localStream;
+        setdisabled(false);
+        setIconDisabled("");
+        setPmsBtnDisabled("disabled");
+    }
     const answermeeting = async () => {
         // get the callID that the invitee shared and access the data
         const callId = callinput.current.value;
