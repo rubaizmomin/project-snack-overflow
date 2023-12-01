@@ -9,7 +9,6 @@ import { useEffect } from 'react';
 import {translate} from '../../services/translateApiService.js';
 import { useNavigate } from 'react-router-dom';
 import './meeting.css';
-
 const firebaseConfig = {
   apiKey: "AIzaSyDeiAhAi21ev36X-B0z9_sN4YexK7o1VY4",
   authDomain: "project-snack-overflow.firebaseapp.com",
@@ -59,6 +58,7 @@ function Video_connection({transcription_text, recognition}) {
   const [iconDisabled, setIconDisabled] = useState("disabled");
   const [disabled, setdisabled] = useState(true);
   const [text, settext] = useState('');
+  let error = '';
   const meetingId = window.location.href.split("/")[4];
   const data = useLocation();
   const navigate = useNavigate();
@@ -188,18 +188,25 @@ function Video_connection({transcription_text, recognition}) {
         });
       });
     }
-    const checkmeeting = async() => {
-      if(await firestore.collection('calls').doc(meetingId).get('answer').data() !== undefined)
-        
+    const checksecurity = async () =>{
+      if(!((await firestore.collection('calls').doc(meetingId).get()).exists)){
+        error = "The meeting does not exist.";
+        throw new Error();
+      }
+      if(((await firestore.collection('calls').doc(meetingId).get()).data().answer) !== undefined){
+        error = "You cannot join the meeting again. Please do not refresh the ongoing meeting."
+        throw new Error();
+      }
     }
-    checkmeeting().then(() =>{
-      webcam_on().then(()=>{
-        connectmeeting().then(() => {
-          answermeeting();
-        })
+    checksecurity().catch((e)=>{
+      navigate('/error', {state: {errormessage:error}});
+      return;
+    });
+    webcam_on().then(()=>{
+      connectmeeting().then(() => {
+        answermeeting();
       })
-    })
-
+    });
   }, []); // Empty dependency array means this effect will run only once, on component mount
   const togglemute = async () => {
     if(localStream.getTracks().find(track => track.kind === 'audio').enabled){
@@ -241,7 +248,6 @@ function Video_connection({transcription_text, recognition}) {
     });
     localvideo.current.srcObject = null;
     remotevideo.current.srcObject = null;
-    await firestore.collection('calls').doc(data.state.callId).delete();
     navigate(`/meetingend/${data.state.callId}`, {state: {privilege: "You"}})
   }
 
