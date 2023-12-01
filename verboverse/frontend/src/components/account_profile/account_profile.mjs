@@ -3,6 +3,7 @@ import { Popper, ClickAwayListener } from '@mui/base';
 import { Avatar, Drawer, Sheet, DialogTitle, ModalClose, Divider, DialogContent, Typography,
          MenuItem, Button, MenuList, styled } from '@mui/joy';
 import { langs } from './languages.mjs';
+import './account_profile.css';
 
 const Popup = styled(Popper)({
     zIndex: 1000,
@@ -12,7 +13,7 @@ const AccountProfile = () => {
     const buttonRef = useRef(null);
     const [openProfile, setOpenProfile] = useState(false);
     const [openDropdown, setOpenDropdown] = useState(false);
-    const [language, setLanguage] = useState('English (CA)');
+    const [language, setLanguage] = useState('English');
 
     const handleCloseDropdown = () => {
         setOpenDropdown(false);
@@ -114,9 +115,6 @@ const AccountProfile = () => {
                                         {langs.map(([lang, [id]]) => (
                                             <MenuItem key={id} onClick={ () => { handleCloseDropdown(); setLanguage(lang);}}>{lang}</MenuItem>
                                         ))}
-                                        <MenuItem onClick={ () => { handleCloseDropdown(); setLanguage('English (CA)');}}>English (CA)</MenuItem>
-                                        <MenuItem onClick={ () => { handleCloseDropdown(); setLanguage('French (CA)');}}>French (CA)</MenuItem>
-                                        <MenuItem onClick={ () => { handleCloseDropdown(); setLanguage('Spanish');}}>Spanish</MenuItem>
                                     </MenuList>
                                     </ClickAwayListener>
                             </Popup>
