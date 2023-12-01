@@ -62,6 +62,7 @@ function Video_connection({transcription_text}) {
   const [iconDisabled, setIconDisabled] = useState("disabled");
   const [disabled, setdisabled] = useState(true);
   const [text, settext] = useState('');
+  const meetingId = window.location.href.split("/")[4];
   const data = useLocation();
   // replace HTML with video feedback object
   // const appendTranslatedText = (newtext) => {
@@ -106,7 +107,7 @@ function Video_connection({transcription_text}) {
       // Create a New ID for a call
       if(data.state.privilege !== "offer")
         return;
-      const callDoc = firestore.collection('calls').doc(data.state.callId);
+      const callDoc = firestore.collection('calls').doc(meetingId);
       // Create new collection
       const offerCandidates = callDoc.collection('offerCandidates');
       const answerCandidates = callDoc.collection('answerCandidates');
@@ -153,8 +154,7 @@ function Video_connection({transcription_text}) {
       // get the callID that the invitee shared and access the data
       if(data.state.privilege !== "answer")
         return;
-      const callId = data.state.callId;
-      const callDoc = firestore.collection('calls').doc(callId);
+      const callDoc = firestore.collection('calls').doc(meetingId);
       const offerCandidates = callDoc.collection('offerCandidates');
       const answerCandidates = callDoc.collection('answerCandidates');
     
@@ -194,11 +194,18 @@ function Video_connection({transcription_text}) {
         });
       });
     }
-    webcam_on().then(()=>{
-      connectmeeting().then(() => {
-        answermeeting();
+    const checkmeeting = async() => {
+      if(await firestore.collection('calls').doc(meetingId).get('answer').data() !== undefined)
+        
+    }
+    checkmeeting().then(() =>{
+      webcam_on().then(()=>{
+        connectmeeting().then(() => {
+          answermeeting();
+        })
       })
     })
+
   }, []); // Empty dependency array means this effect will run only once, on component mount
   const togglemute = async () => {
     if(localStream.getTracks().find(track => track.kind === 'audio').enabled){
@@ -242,7 +249,7 @@ function Video_connection({transcription_text}) {
   return(
     <div className='videos_display'>
       <h3>Meeting</h3>
-      <p>Meeting ID: {data.state.callId}</p>
+      <p>Meeting ID: {meetingId}</p>
       <div className='videos_align_top'>
         <div className='video_container'>
           <video className='remote_video' ref={remotevideo} autoPlay playsInline></video>
