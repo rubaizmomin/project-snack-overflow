@@ -45,18 +45,14 @@ const Join_meeting = () =>{
                                     callId: callinput.current.value, privilege: "answer"}});
     }
     useEffect(()=>{
-        const turnon = async () => {
-            localStream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
-        }
-        turnon();
-        const meetingId = window.location.href.split("/")[4];
+        let meetingId = window.location.href.split("/")[4];
         if(meetingId === undefined)
             meetingId = "";
         callinput.current.value = meetingId;
     }, []);
     const webcam = async () => {
         //get permissions for audio and video
-        // localStream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
+        localStream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
         // replace HTML with video feedback object
         localvideo.current.srcObject = localStream;
         setdisabled(false);

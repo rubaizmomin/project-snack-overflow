@@ -42,16 +42,11 @@ const Create_meeting = () =>{
         else
             console.log("NOT AN EMAIL OR NOT REGISTERED");
     }
-    useEffect(()=>{
-        const turnon = async () => {
-            localStream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
-        }
-        turnon();
-    }, []);
+    
     const webcam = async () => {
         //get permissions for audio and video
         // replace HTML with video feedback object
-        // localStream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
+        localStream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
         localvideo.current.srcObject = localStream;
         setdisabled(false);
         setIconDisabled("");
@@ -84,7 +79,7 @@ const Create_meeting = () =>{
 
             </div>
             <div className='video_button_display'>
-                <input ref={emailinput} />
+                <input ref={emailinput} placeholder="Enter the invitee's email to create meeting" />
                 <button className={classnames("btn btn_blue", pmsBtnDisabled)} onClick={webcam}>Video and Audio permissions</button>
                 <button className="btn-action" onClick={togglemute} disabled={disabled}>
                     <div className={classnames(micIcon, iconDisabled, "icon")}></div>
