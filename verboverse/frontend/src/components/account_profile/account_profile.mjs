@@ -2,6 +2,8 @@ import React, { useState, useRef } from 'react';
 import { Popper, ClickAwayListener } from '@mui/base';
 import { Avatar, Drawer, Sheet, DialogTitle, ModalClose, Divider, DialogContent, Typography,
          MenuItem, Button, MenuList, styled } from '@mui/joy';
+import { langs } from './languages.mjs';
+import './account_profile.css';
 
 const Popup = styled(Popper)({
     zIndex: 1000,
@@ -11,7 +13,7 @@ const AccountProfile = () => {
     const buttonRef = useRef(null);
     const [openProfile, setOpenProfile] = useState(false);
     const [openDropdown, setOpenDropdown] = useState(false);
-    const [language, setLanguage] = useState('English (CA)');
+    const [language, setLanguage] = useState('English');
 
     const handleCloseDropdown = () => {
         setOpenDropdown(false);
@@ -59,16 +61,17 @@ const AccountProfile = () => {
                     <ModalClose />
                     <Divider sx={{ mt: 'auto' }} />
                     <DialogContent sx={{ gap: 2 }}>
-                        <Typography level="title-md" fontWeight="bold" sx={{ mt: 1 }}>
+                        <Typography align="left" level="title-md" fontWeight="bold" sx={{ mt: 1, mr: 1 }}>
                             Username:
                         </Typography>
-                        <Typography level="title-md" fontWeight="bold" sx={{ mt: 1 }}>
+                        <Typography align="left" level="title-md" fontWeight="bold" sx={{ mt: 1, mr: 1 }}>
                             Email:
                         </Typography>
-                        <Typography level="title-md" fontWeight="bold" sx={{ mt: 1 }}>
+                        <div id="language_select">
+                        <Typography align="left" level="title-md" fontWeight="bold" sx={{ mt: 1, mr: 1 }}>
                             Primary Language:
                         </Typography>
-                        <div>
+                        
                             <Button
                                 ref={buttonRef}
                                 id="composition-button"
@@ -98,23 +101,23 @@ const AccountProfile = () => {
                                 },
                                 ]}
                             >
-                                <ClickAwayListener
-                                onClickAway={(event) => {
-                                    if (event.target !== buttonRef.current) {
-                                    handleCloseDropdown();
-                                    }
-                                }}
-                                >
-                                <MenuList
-                                    variant="outlined"
-                                    onKeyDown={handleListKeyDown}
-                                    sx={{ boxShadow: 'md' }}
-                                >
-                                    <MenuItem onClick={ () => { handleCloseDropdown(); setLanguage('English (CA)');}}>English (CA)</MenuItem>
-                                    <MenuItem onClick={ () => { handleCloseDropdown(); setLanguage('French (CA)');}}>French (CA)</MenuItem>
-                                    <MenuItem onClick={ () => { handleCloseDropdown(); setLanguage('Spanish');}}>Spanish</MenuItem>
-                                </MenuList>
-                                </ClickAwayListener>
+                                    <ClickAwayListener
+                                    onClickAway={(event) => {
+                                        if (event.target !== buttonRef.current) {
+                                        handleCloseDropdown();
+                                        }
+                                    }}
+                                    >
+                                    <MenuList
+                                        variant="outlined"
+                                        onKeyDown={handleListKeyDown}
+                                        sx={{ boxShadow: 'md' }}
+                                    >
+                                        {langs.map(([lang, [id]]) => (
+                                            <MenuItem key={id} onClick={ () => { handleCloseDropdown(); setLanguage(lang);}}>{lang}</MenuItem>
+                                        ))}
+                                    </MenuList>
+                                    </ClickAwayListener>
                             </Popup>
                         </div>
                     </DialogContent>
