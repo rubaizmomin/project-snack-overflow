@@ -6,10 +6,8 @@ import { createCall, getCall, getCalls, addOfferCandidates, addOffer } from '../
 import 'firebase/compat/firestore';
 import { useLocation } from 'react-router-dom';
 import { useEffect } from 'react';
-import Transcript from '../transcript_display/speech_to_text_display.mjs';
-import { sendEmail } from '../../services/sendGridApiService.js';
 import {translate} from '../../services/translateApiService.js';
-
+import { useNavigate } from 'react-router-dom';
 import './meeting.css';
 
 const firebaseConfig = {
@@ -47,15 +45,14 @@ const servers = {
 
 const pc = new RTCPeerConnection(servers);
 const channel = pc.createDataChannel("chat", { negotiated: true, id: 0 });
-
+const hangupchannel = pc.createDataChannel("chat", { negotiated: true, id: 1 });
 const localvideo = React.createRef();
 const remotevideo = React.createRef();
-const textinput = React.createRef();
 let localStream;
 let remoteStream;
 let target = "fr";
 
-function Video_connection({transcription_text}) {
+function Video_connection({transcription_text, recognition}) {
   const [micIcon, setMicIcon] = useState("unmute-icon");
   const [cameraIcon, setCameraIcon] = useState("camera-on-icon");
   const [transcriptIcon, setTranscriptIcon] = useState("transcript-on-icon");
@@ -63,10 +60,7 @@ function Video_connection({transcription_text}) {
   const [disabled, setdisabled] = useState(true);
   const [text, settext] = useState('');
   const data = useLocation();
-  // replace HTML with video feedback object
-  // const appendTranslatedText = (newtext) => {
-  //   settext(text + newtext);
-  // }
+  const navigate = useNavigate();
   useEffect(() => {
     const webcam_on = async () => {
       localStream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
@@ -226,12 +220,49 @@ function Video_connection({transcription_text}) {
       setTranscriptIcon("transcript-on-icon");
     }
   }
+  const hangup = async () =>{
+    if(hangupchannel.readyState === 'open'){
+      hangupchannel.send(data.state.privilege);
+    }
+    recognition.stop();
+    pc.close();
+    localStream.getTracks().forEach(function(track) {
+      track.stop();
+    });
+    remoteStream.getTracks().forEach(function(track) {
+      track.stop();
+    });
+    localvideo.current.srcObject = null;
+    remotevideo.current.srcObject = null;
+    await firestore.collection('calls').doc(data.state.callId).delete();
+    navigate(`/meetingend/${data.state.callId}`, {state: {privilege: "You"}})
+  }
+
   useEffect(()=>{
     if(channel.readyState === 'open'){
       if(micIcon === "unmute-icon") // audio is on
         channel.send(transcription_text);
     }
   }, [transcription_text]);
+
+  hangupchannel.onmessage = (event) => {
+    pc.close();
+    localStream.getTracks()
+    localStream.getTracks().forEach(function(track) {
+      track.stop();
+    });
+    remoteStream.getTracks().forEach(function(track) {
+      track.stop();
+    });
+    localvideo.current.srcObject = null;
+    remotevideo.current.srcObject = null;
+    let deleter;
+    if(event.data === "offer")
+      deleter = "The Host";
+    else
+      deleter = "The Answerer"
+    navigate(`/meetingend/${data.state.callId}`, {state: {privilege: deleter}})
+  }
 
   channel.onmessage = async (event) => {
     if(transcriptIcon === "transcript-on-icon"){
@@ -266,7 +297,7 @@ function Video_connection({transcription_text}) {
           <div className={classnames(transcriptIcon, iconDisabled, "icon")}></div>
         </button>
         <button className="btn-action">
-          <div className="hangup-icon icon"></div>
+          <div className="hangup-icon icon" onClick={hangup} disabled={disabled}></div>
         </button>
       </div>
     </div>
