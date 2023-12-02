@@ -1,4 +1,4 @@
-import React, { useEffect, useState, forwardRef } from "react";
+import React, { useState } from "react";
 import {translate} from '../../services/translateApiService.js';
 import styles from "@chatscope/chat-ui-kit-styles/dist/default/styles.min.css";
 import {
