@@ -296,9 +296,12 @@ function Video_connection({transcription_text, recognition}) {
           <p className='overlay_text'>Remote Stream</p>
           <p className='subtitle'>{text}</p>
         </div>
-        <div className='video_container'>
-          <video className='local_video' ref={localvideo} autoPlay playsInline muted="muted"></video>
-          <p className='overlay_text'>Local Stream</p>
+        <div>
+          <div className='video_container'>
+            <video className='local_video' ref={localvideo} autoPlay playsInline muted="muted"></video>
+            <p className='overlay_text'>Local Stream</p>
+          </div>
+          <Chat channel={chatchannel} targetlanguage={target}/>
         </div>
       </div>
       
@@ -316,7 +319,6 @@ function Video_connection({transcription_text, recognition}) {
           <div className="hangup-icon icon" onClick={hangup} disabled={disabled}></div>
         </button>
       </div>
-      <Chat channel={chatchannel} targetlanguage={target}/>
     </div>
   );
 }
