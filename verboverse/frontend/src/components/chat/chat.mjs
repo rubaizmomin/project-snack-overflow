@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import {translate} from '../../services/translateApiService.js';
+import './chat.css';
 const messageinput = React.createRef();
 const Chat = ({channel, targetlanguage}) =>{
     const [disabled, setdisabled] = useState(true);
@@ -63,5 +64,3 @@ const Chat = ({channel, targetlanguage}) =>{
     )
 }
 export default Chat;
-//When I send the message:
-
