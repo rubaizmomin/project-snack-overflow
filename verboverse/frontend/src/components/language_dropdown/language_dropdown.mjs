@@ -1,6 +1,7 @@
 import React, { useState, useRef } from 'react';
 import { Popper, ClickAwayListener } from '@mui/base';
-import { Typography, MenuItem, Button, MenuList, styled } from '@mui/joy';
+import { Typography, Button, MenuItem, MenuList } from '@mui/material';
+import { styled } from '@mui/joy';
 import { langs } from './languages.mjs';
 import './language_dropdown.css';
 
@@ -10,7 +11,6 @@ const Popup = styled(Popper)({
 
 const LanguageDropdown = () => {
     const buttonRef = useRef(null);
-    // const [openProfile, setOpenProfile] = useState(false);
     const [openDropdown, setOpenDropdown] = useState(false);
     const [language, setLanguage] = useState('English');
 
@@ -29,7 +29,7 @@ const LanguageDropdown = () => {
 
     return(
       <div id="language_select">
-        <Typography align="left" level="title-md" fontWeight="bold" sx={{ mt: 1, mr: 1 }}>
+        <Typography color="black" align="left" level="title-md" fontWeight="bold" sx={{ mt: 1, mr: 1 }}>
             Primary Language:
         </Typography>
           <Button
@@ -38,8 +38,11 @@ const LanguageDropdown = () => {
               aria-controls={'composition-menu'}
               aria-haspopup="true"
               aria-expanded={openDropdown ? 'true' : undefined}
-              variant="outlined"
-              color="neutral"
+              color="secondary"
+              type="button"
+              fullWidth
+              variant="contained"
+              sx={{ mt: 3, mb: 2 }}
               onClick={() => {
                   setOpenDropdown(!openDropdown);
               }}
@@ -69,7 +72,7 @@ const LanguageDropdown = () => {
               }}
               >
               <MenuList
-                  variant="outlined"
+                  variant="contained"
                   onKeyDown={handleListKeyDown}
                   sx={{ boxShadow: 'md' }}
               >
