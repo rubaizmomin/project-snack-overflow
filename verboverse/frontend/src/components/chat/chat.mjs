@@ -1,67 +1,54 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import {translate} from '../../services/translateApiService.js';
-const messageinput = React.createRef();
+import styles from "@chatscope/chat-ui-kit-styles/dist/default/styles.min.css";
+import {
+    ChatContainer,
+    MessageList,
+    Message,
+    MessageInput,
+  } from "@chatscope/chat-ui-kit-react";
+import './chat.css';
 const Chat = ({channel, targetlanguage}) =>{
+    const [messageinput, setMessageInput] = useState('');
     const [disabled, setdisabled] = useState(true);
+    const [messages, setMessages] = useState([]);
     const chatchannel = channel;
     chatchannel.onopen = () => {
         setdisabled(false);
     }
     const sendmessage = () => {
-        if(messageinput.current.value === '')
+        if(messageinput === '')
             return;
         if(chatchannel.readyState === 'open'){
-            const messageinfo={
-                username: "The other side: ",
-                message: messageinput.current.value
+            chatchannel.send(messageinput);
+            const newMessage = {
+                message: messageinput,
+                direction: "outgoing",
             }
-            chatchannel.send(JSON.stringify(messageinfo));
-
-            const MessageInfodiv = document.createElement("div");
-            MessageInfodiv.className = "MessageInfo";
-
-            const myUsernamediv = document.createElement("div");
-            myUsernamediv.className = "MyUsername";
-            myUsernamediv.innerHTML = "Me: ";
-            MessageInfodiv.appendChild(myUsernamediv);
-
-            const myMessagediv = document.createElement("div");
-            myMessagediv.className = "MyMessage";
-            myMessagediv.innerHTML = messageinput.current.value;
-            MessageInfodiv.appendChild(myMessagediv);
-
-            document.getElementById("Chat").appendChild(MessageInfodiv);
-            messageinput.current.value = "";
+            setMessages(prevMessages => [...prevMessages, newMessage]);
+            setMessageInput("");
         }
     }
     chatchannel.onmessage = (event) =>{
-        const messageinfo = JSON.parse(event.data);
-        const MessageInfodiv = document.createElement("div");
-        MessageInfodiv.className = "MessageInfo";
-
-        const theirUsernamediv = document.createElement("div");
-        theirUsernamediv.className = "TheirUsername";
-        theirUsernamediv.innerHTML = messageinfo.username;
-        MessageInfodiv.appendChild(theirUsernamediv);
-
-        const theirMessagediv = document.createElement("div");
-        theirMessagediv.className = "TheirMessage";
-        translate(messageinfo.message, targetlanguage).then((translatedmessage)=>{
-            theirMessagediv.innerHTML = translatedmessage.translation;
-            MessageInfodiv.appendChild(theirMessagediv);
-            document.getElementById("Chat").appendChild(MessageInfodiv);   
+        translate(event.data, targetlanguage).then((translatedmessage)=>{
+            const newMessage = {
+                message: translatedmessage.translation,
+                direction: "incoming",
+            }
+            setMessages(prevMessages => [...prevMessages, newMessage]);
         })
-     
     }
     return(
         <div>
-            <div className="Chat" id="Chat">
-            </div>
-            <input placeholder="Enter message" ref={messageinput}/>
-            <button onClick={sendmessage} disabled={disabled}>Send</button>
+            <ChatContainer className="chat-container">
+                <MessageList>
+                    {messages.map((message, index) => (
+                        <Message key={index} model={message} />
+                    ))}
+                </MessageList>
+                <MessageInput placeholder="Type message here" attachButton={false} onChange={(text) => setMessageInput(text)} onSend={sendmessage} disabled={disabled} />
+            </ChatContainer>
         </div>
     )
 }
 export default Chat;
-//When I send the message:
-
