@@ -3,6 +3,7 @@ import { Popper, ClickAwayListener } from '@mui/base';
 import { Avatar, Drawer, Sheet, DialogTitle, ModalClose, Divider, DialogContent, Typography,
          MenuItem, Button, MenuList, styled } from '@mui/joy';
 import { langs } from './languages.mjs';
+import { updateLanguage, updateName, updateEmail } from '../../services/userApiService.js';
 import './account_profile.css';
 
 const Popup = styled(Popper)({

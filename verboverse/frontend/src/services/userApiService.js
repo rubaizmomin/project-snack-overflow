@@ -37,6 +37,35 @@ export const me = async () => {
     });
 }
 
+export const updateLanguage = async (_id, language) => {
+    return await fetchTemplate('/updateme', {
+        method: 'PATCH',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({_id, language})
+    });
+}
+
+export const updateName = async (_id, name) => {
+    return await fetchTemplate('/updateme', {
+        method: 'PATCH',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({_id, name})
+    });
+}
+
+export const updateEmail = async (_id, email) => {
+    return await fetchTemplate('/updateme', {
+        method: 'PATCH',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({_id, email})
+    });
+}
 
 
 
