@@ -27,11 +27,9 @@ const AccountProfile = () => {
             while (retryCount < maxRetries) {
                 try {
                     const response = await me(cookies.token);
-                    console.log('Response account profile:', response);
 
                     if (response.success) {
                         setUser(response.user);
-                        console.log('User:', user);
                         break;
                     }
                 } catch (error) {
@@ -59,12 +57,11 @@ const AccountProfile = () => {
         }
     };
 
-
-
     const handleLanguageChange = (language) => {
         handleCloseDropdown(); 
         setLanguage(language);
-        updateLanguage(language);
+        const id = user._id;
+        updateLanguage(cookies.token, id, language);
     }
 
     return(

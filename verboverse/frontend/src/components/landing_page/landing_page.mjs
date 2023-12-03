@@ -13,9 +13,7 @@ export default function LandingPage({ signedIn }) {
 
     const navigate = useNavigate();
     const handleSignout = async () => {
-        console.log(cookies.token);
         const response = await logout(cookies.token);
-        console.log(response);
         if (response.success) {
             navigate("/");
         }

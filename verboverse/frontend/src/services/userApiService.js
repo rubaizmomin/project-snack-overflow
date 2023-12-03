@@ -67,6 +67,7 @@ export const updateLanguage = async (token, _id, language) => {
             'Content-Type': 'application/json',
             'Authorization': `Bearer ${token}`
         },
+        credentials: 'include',
         body: JSON.stringify({_id, language})
     });
 }

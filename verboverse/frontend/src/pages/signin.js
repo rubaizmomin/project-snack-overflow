@@ -32,9 +32,8 @@ export default function SignIn() {
         const receivedToken = response.token;
         setCookie('token', receivedToken);
         const user = await me(cookies.token);
-        console.log(user);
-        toast.success("Successfully signed in! ");
         directToHome();
+        toast.success("Successfully signed in! ");
     } else {
         toast.error('Failed to sign in!');
     }
