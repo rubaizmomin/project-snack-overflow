@@ -1,9 +1,9 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { Popper, ClickAwayListener } from '@mui/base';
 import { Avatar, Drawer, Sheet, DialogTitle, ModalClose, Divider, DialogContent, Typography,
          MenuItem, Button, MenuList, styled } from '@mui/joy';
 import { langs } from './languages.mjs';
-import { updateLanguage, updateName, updateEmail } from '../../services/userApiService.js';
+import { me, updateLanguage, updateName, updateEmail } from '../../services/userApiService.js';
 import './account_profile.css';
 
 const Popup = styled(Popper)({
@@ -15,6 +15,34 @@ const AccountProfile = () => {
     const [openProfile, setOpenProfile] = useState(false);
     const [openDropdown, setOpenDropdown] = useState(false);
     const [language, setLanguage] = useState('English');
+    const [user, setUser] = useState(null);
+
+    useEffect(() => {
+        const fetchUser = async () => {
+            let retryCount = 0;
+            const maxRetries = 3; 
+
+            while (retryCount < maxRetries) {
+                try {
+                    const response = await me();
+                    console.log('Response:', response);
+
+                    if (response.success) {
+                        setUser(response.data);
+                        console.log('User:', user);
+                        break;
+                    }
+                } catch (error) {
+                    console.error('Error fetching user:', error);
+                }
+
+                await new Promise(resolve => setTimeout(resolve, 3000));
+                retryCount++;
+            }
+        };
+
+        fetchUser();
+    }, []);
 
     const handleCloseDropdown = () => {
         setOpenDropdown(false);
@@ -28,6 +56,14 @@ const AccountProfile = () => {
         setOpenDropdown(false);
         }
     };
+
+
+
+    const handleLanguageChange = (language) => {
+        handleCloseDropdown(); 
+        setLanguage(language);
+        updateLanguage(language);
+    }
 
     return(
         <div>
@@ -115,7 +151,7 @@ const AccountProfile = () => {
                                         sx={{ boxShadow: 'md' }}
                                     >
                                         {langs.map(([lang, [id]]) => (
-                                            <MenuItem key={id} onClick={ () => { handleCloseDropdown(); setLanguage(lang);}}>{lang}</MenuItem>
+                                            <MenuItem key={id} onClick={ () => { handleLanguageChange(lang) }}>{lang}</MenuItem>
                                         ))}
                                     </MenuList>
                                     </ClickAwayListener>

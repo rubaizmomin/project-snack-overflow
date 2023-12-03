@@ -1,3 +1,5 @@
+import { useCookies } from "react-cookie";
+
 const BASE_URL = 'http://localhost:9000/api';
 
 const fetchTemplate = async (url, params = {}) => {
@@ -16,13 +18,23 @@ export const signup = async (name, email, password) => {
 }
 
 export const signin = async (email, password) => {
-    return await fetchTemplate('/signin', {
+    const response = await fetchTemplate('/signin', {
         method: 'POST',
         headers: {
-            'Content-Type': 'application/json'
+            'Content-Type': 'application/json',
+            'credentials': 'include'
         },
         body: JSON.stringify({email, password})
     });
+
+    if (response.success) {
+        return {
+            success: true,
+            token: response.token
+        }
+    }
+
+
 }
 
 export const logout = async () => {
@@ -31,9 +43,15 @@ export const logout = async () => {
     });
 }
 
-export const me = async () => {
+export const me = async (token) => {
     return await fetchTemplate('/me', {
-        method: 'GET'
+        method: 'GET',
+        mode: 'cors',
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
+        },
+        credentials: 'include'
     });
 }
 
