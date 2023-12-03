@@ -20,6 +20,7 @@ const AccountProfile = () => {
     const [cookies, setCookie] = useCookies(['token']);
     const [username, setusername] = useState('Local Stream');
     const [email, setemail] = useState('Local Stream email');
+
     useEffect(() => {
         const fetchUser = async () => {
             let retryCount = 0;
@@ -31,6 +32,8 @@ const AccountProfile = () => {
 
                     if (response.success) {
                         setUser(response.user);
+                        setusername(response.user.name);
+                        setemail(response.user.email);
                         break;
                     }
                 } catch (error) {

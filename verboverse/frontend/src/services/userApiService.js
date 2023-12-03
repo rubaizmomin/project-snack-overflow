@@ -32,6 +32,10 @@ export const signin = async (email, password) => {
             success: true,
             token: response.token
         }
+    } else {
+        return {
+            success: false
+        }
     }
 }
 
