@@ -58,24 +58,26 @@ function Transcript() {
         }
       }
       finalTranscript = capitalize(finalTranscript);
+      setInterimSpan(linebreak(finalTranscript) + linebreak(interimTranscript));
       setFinalSpan(linebreak(finalTranscript));
-      setInterimSpan(linebreak(interimTranscript));
     };
   });
+
   useEffect(()=>{
     recognition.lang = languageChosen;
     recognition.start();
     start_timestamp = performance.now();
+    setInterval(()=>{
+      finalTranscript = '';
+    }, 5000);
   }, []);
 
   return(
     <div id="results">
       <Video_connection transcription_text={interimSpan} recognition={recognition}/>
-      <p>Transcript 
         {/* <span id="info"> ({info}):<br /></span> */}
         {/* <span id="finalSpan" style={{color:'black'}}>{finalSpan}</span> */}
-        {/* <span id="interimSpan" style={{color:'blue'}}>{interimSpan}</span> */}
-      </p>
+        <span id="interimSpan" style={{color:'blue'}}>{interimSpan}</span>
     </div>
   );
 }
