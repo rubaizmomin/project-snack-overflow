@@ -254,13 +254,6 @@ function Video_connection({transcription_text, recognition}) {
     navigate(`/meetingend/${data.state.callId}`, {state: {privilege: "You"}})
   }
 
-  useEffect(()=>{
-    if(channel.readyState === 'open'){
-      if(micIcon === "unmute-icon") // audio is on
-        channel.send(transcription_text);
-    }
-  }, [transcription_text]);
-
   hangupchannel.onmessage = (event) => {
     pc.close();
     localStream.getTracks()
@@ -279,6 +272,16 @@ function Video_connection({transcription_text, recognition}) {
       deleter = "The Answerer"
     navigate(`/meetingend/${data.state.callId}`, {state: {privilege: deleter}})
   }
+
+  useEffect(()=>{
+    if(transcription_text === '')
+      return;
+    console.log(transcription_text);
+    if(channel.readyState === 'open'){
+      if(micIcon === "unmute-icon") // audio is on
+        channel.send(transcription_text);
+    }
+  }, [transcription_text]);
 
   channel.onmessage = async (event) => {
     if(transcriptIcon === "transcript-on-icon"){
@@ -304,7 +307,6 @@ function Video_connection({transcription_text, recognition}) {
           <Chat channel={chatchannel} targetlanguage={target}/>
         </div>
       </div>
-      
       <div className='video_button_display'>
         <button className="btn-action" onClick={togglemute} disabled={disabled}>
           <div className={classnames(micIcon, iconDisabled, "icon")}></div>
