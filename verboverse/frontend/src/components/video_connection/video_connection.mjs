@@ -62,6 +62,7 @@ function Video_connection({transcription_text, recognition}) {
   const meetingId = window.location.href.split("/")[4];
   const data = useLocation();
   const navigate = useNavigate();
+  console.log(pc.remoteDescription);
   useEffect(() => {
     const webcam_on = async () => {
       localStream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
@@ -123,13 +124,18 @@ function Video_connection({transcription_text, recognition}) {
       await callDoc.set({ offer });
     
       // listener for new candidatess added by remote user
-      callDoc.onSnapshot((snapshot) => {
+      callDoc.onSnapshot(async (snapshot) => {
         const data = snapshot.data();
         // check remote connection and if data was received
         if (!pc.currentRemoteDescription && data?.answer) {
           // set the answer SDP
           const answerDescription = new RTCSessionDescription(data.answer);
-          pc.setRemoteDescription(answerDescription);
+          try{
+            await pc.setRemoteDescription(answerDescription);
+          }catch(e){
+            console.log(e);
+            console.log("I KNEW IT");
+          }
         }
       });  
       // Listen for remote ICE candidates
