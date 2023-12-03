@@ -72,7 +72,6 @@ const LanguageDropdown = () => {
               }}
               >
               <MenuList
-                  variant="contained"
                   onKeyDown={handleListKeyDown}
                   sx={{ boxShadow: 'md' }}
               >
