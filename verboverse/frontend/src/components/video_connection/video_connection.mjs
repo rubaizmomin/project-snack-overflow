@@ -63,6 +63,7 @@ function Video_connection({transcription_text, recognition}) {
   const [cookies, setCookie] = useCookies(['token']);
   const [localusername, setlocalusername] = useState('Local Stream');
   const [remoteusername, setremoteusername] = useState('Remote Stream');
+  
   let error = '';
   const meetingId = window.location.href.split("/")[4];
   const data = useLocation();
@@ -301,7 +302,7 @@ function Video_connection({transcription_text, recognition}) {
 
   channel.onmessage = async (event) => {
     if(transcriptIcon === "transcript-on-icon"){
-      let incomingtext = await translate(event.data, target);
+      let incomingtext = await translate(cookies.token, event.data, target);
       settext(incomingtext.translation);
     }
   };
