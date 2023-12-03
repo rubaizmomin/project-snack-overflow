@@ -66,15 +66,18 @@ export async function signin (req, res, next) {
 const sendTokenResponse = async(user, codeStatus, res) => {
     const token = await user.getJwtToken();
     res.status(codeStatus)
-    .cookie('token', token, {
-        maxAge: 60*60*1000, // 1 hour
-        httpOnly: true
-    })
+    // .cookie('token', token, {
+    //     maxAge: 60*60*1000, // 1 hour
+    //     httpOnly: true,
+    //     sameSite: 'None'
+    //     // signed: true
+    // })
     .json({
         success: true,
         id: user._id,
-        role:user.role, 
-    })
+        role:user.role,
+        token 
+    });
 }
 
 // logout 
@@ -88,7 +91,12 @@ export function logout (req, res, next) {
 
 // user profile
 export async function userProfile(req, res, next) { 
+    console.log("what's going on");
     const user = await User.findById(req.user._id).select("-password");
+
+    // const authtoken = req.signedCookies.token;
+    // console.log("Hi"); 
+    // console.log(authtoken);
     res.status(200).json({
         success: true,
         user
