@@ -33,13 +33,17 @@ export const signin = async (email, password) => {
             token: response.token
         }
     }
-
-
 }
 
-export const logout = async () => {
+export const logout = async (token) => {
     return await fetchTemplate('/logout', {
-        method: 'GET'
+        method: 'GET',
+        mode: 'cors',
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
+        },
+        credentials: 'include'
     });
 }
 
@@ -55,11 +59,13 @@ export const me = async (token) => {
     });
 }
 
-export const updateLanguage = async (_id, language) => {
+export const updateLanguage = async (token, _id, language) => {
     return await fetchTemplate('/updateme', {
         method: 'PATCH',
+        mode: 'cors',
         headers: {
-            'Content-Type': 'application/json'
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
         },
         body: JSON.stringify({_id, language})
     });

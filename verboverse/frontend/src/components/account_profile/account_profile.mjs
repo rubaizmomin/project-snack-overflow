@@ -3,8 +3,9 @@ import { Popper, ClickAwayListener } from '@mui/base';
 import { Avatar, Drawer, Sheet, DialogTitle, ModalClose, Divider, DialogContent, Typography,
          MenuItem, Button, MenuList, styled } from '@mui/joy';
 import { langs } from './languages.mjs';
-import { me, updateLanguage, updateName, updateEmail } from '../../services/userApiService.js';
+import { me, updateLanguage } from '../../services/userApiService.js';
 import './account_profile.css';
+import { useCookies } from "react-cookie";
 
 const Popup = styled(Popper)({
     zIndex: 1000,
@@ -16,6 +17,7 @@ const AccountProfile = () => {
     const [openDropdown, setOpenDropdown] = useState(false);
     const [language, setLanguage] = useState('English');
     const [user, setUser] = useState(null);
+    const [cookies, setCookie] = useCookies(['token']);
 
     useEffect(() => {
         const fetchUser = async () => {
@@ -24,11 +26,11 @@ const AccountProfile = () => {
 
             while (retryCount < maxRetries) {
                 try {
-                    const response = await me();
-                    console.log('Response:', response);
+                    const response = await me(cookies.token);
+                    console.log('Response account profile:', response);
 
                     if (response.success) {
-                        setUser(response.data);
+                        setUser(response.user);
                         console.log('User:', user);
                         break;
                     }

@@ -28,8 +28,6 @@ export default function SignIn() {
     const data = new FormData(event.currentTarget);
     const response = await signin(data.get('email'), data.get('password'));
 
-    console.log(response);
-
     if (response.success) {
         const receivedToken = response.token;
         setCookie('token', receivedToken);

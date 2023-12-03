@@ -4,11 +4,23 @@ import './landing_page.css'
 import logo from './media/logo.png'
 import Typewriter from "typewriter-effect";
 import { useNavigate } from "react-router-dom";
-import { me, signout } from "../../services/userApiService.js";
+import { me, logout } from "../../services/userApiService.js";
 import AccountProfile from "../account_profile/account_profile.mjs";
+import { useCookies } from "react-cookie";
 
 export default function LandingPage({ signedIn }) {
+    const [cookies, setCookie] = useCookies(['token']);
+
     const navigate = useNavigate();
+    const handleSignout = async () => {
+        console.log(cookies.token);
+        const response = await logout(cookies.token);
+        console.log(response);
+        if (response.success) {
+            navigate("/");
+        }
+    }
+
 
     if (!signedIn) {
         return (
@@ -50,7 +62,7 @@ export default function LandingPage({ signedIn }) {
             <div>
             <div className='navbar'>
                 <AccountProfile />
-                <button className='logout-btn' onClick={(signout) => navigate("/")}>Logout</button>
+                <button className='logout-btn' onClick={handleSignout}>Logout</button>
             </div>
             <div className='page'>
                 <div className='top'>
