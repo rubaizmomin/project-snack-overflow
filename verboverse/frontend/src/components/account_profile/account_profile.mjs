@@ -18,7 +18,8 @@ const AccountProfile = () => {
     const [language, setLanguage] = useState('English');
     const [user, setUser] = useState(null);
     const [cookies, setCookie] = useCookies(['token']);
-
+    const [username, setusername] = useState('Local Stream');
+    const [email, setemail] = useState('Local Stream email');
     useEffect(() => {
         const fetchUser = async () => {
             let retryCount = 0;
@@ -98,10 +99,10 @@ const AccountProfile = () => {
                     <Divider sx={{ mt: 'auto' }} />
                     <DialogContent sx={{ gap: 2 }}>
                         <Typography align="left" level="title-md" fontWeight="bold" sx={{ mt: 1, mr: 1 }}>
-                            Username:
+                            Username: {username}
                         </Typography>
                         <Typography align="left" level="title-md" fontWeight="bold" sx={{ mt: 1, mr: 1 }}>
-                            Email:
+                            Email: {email}
                         </Typography>
                         <div id="language_select">
                         <Typography align="left" level="title-md" fontWeight="bold" sx={{ mt: 1, mr: 1 }}>

@@ -2,13 +2,14 @@ import firebase from 'firebase/compat/app';
 import React, { useState } from 'react';
 import classnames from 'classnames';
 import { signup, login, logout, me } from '../../services/userApiService.js';
-import { createCall, getCall, getCalls, addOfferCandidates, addOffer } from '../../services/callApiService.js';
 import 'firebase/compat/firestore';
 import { useLocation } from 'react-router-dom';
 import { useEffect } from 'react';
 import {translate} from '../../services/translateApiService.js';
 import Chat from '../chat/chat.mjs';import { useNavigate } from 'react-router-dom';
 import './meeting.css';
+import { useCookies } from "react-cookie";
+
 const firebaseConfig = {
   apiKey: "AIzaSyDeiAhAi21ev36X-B0z9_sN4YexK7o1VY4",
   authDomain: "project-snack-overflow.firebaseapp.com",
@@ -46,6 +47,7 @@ const pc = new RTCPeerConnection(servers);
 const channel = pc.createDataChannel("chat", { negotiated: true, id: 0 });
 const hangupchannel = pc.createDataChannel("chat", { negotiated: true, id: 1 });
 const chatchannel = pc.createDataChannel("chat", { negotiated: true, id: 2 });
+const sendusernamechannel = pc.createDataChannel("chat", { negotiated: true, id: 3 });
 const localvideo = React.createRef();
 const remotevideo = React.createRef();
 let localStream;
@@ -58,6 +60,9 @@ function Video_connection({transcription_text, recognition}) {
   const [iconDisabled, setIconDisabled] = useState("disabled");
   const [disabled, setdisabled] = useState(true);
   const [text, settext] = useState('');
+  const [cookies, setCookie] = useCookies(['token']);
+  const [localusername, setlocalusername] = useState('Local Stream');
+  const [remoteusername, setremoteusername] = useState('Remote Stream');
   let error = '';
   const meetingId = window.location.href.split("/")[4];
   const data = useLocation();
@@ -202,6 +207,11 @@ function Video_connection({transcription_text, recognition}) {
       navigate('/error', {state: {errormessage:error}});
       return;
     });
+    const getusername = async()=>{
+      const response = await me(cookies.token);
+      setlocalusername(response.user.name);
+    }
+    getusername();
     webcam_on().then(()=>{
       connectmeeting().then(() => {
         answermeeting();
@@ -261,6 +271,15 @@ function Video_connection({transcription_text, recognition}) {
     }
   }, [transcription_text]);
 
+  useEffect(()=>{
+    if(sendusernamechannel.readyState === 'open'){
+      sendusernamechannel.send(localusername);
+    }
+  },[]);
+
+  sendusernamechannel.onmessage = (event) =>{
+    setremoteusername(event.data);
+  }
   hangupchannel.onmessage = (event) => {
     pc.close();
     localStream.getTracks()
@@ -293,13 +312,13 @@ function Video_connection({transcription_text, recognition}) {
       <div className='videos_align_top'>
         <div className='video_container'>
           <video className='remote_video' ref={remotevideo} autoPlay playsInline></video>
-          <p className='overlay_text'>Remote Stream</p>
+          <p className='overlay_text'>{remoteusername}</p>
           <p className='subtitle'>{text}</p>
         </div>
         <div>
           <div className='video_container'>
             <video className='local_video' ref={localvideo} autoPlay playsInline muted="muted"></video>
-            <p className='overlay_text'>Local Stream</p>
+            <p className='overlay_text'>{localusername}</p>
           </div>
           <Chat channel={chatchannel} targetlanguage={target}/>
         </div>
