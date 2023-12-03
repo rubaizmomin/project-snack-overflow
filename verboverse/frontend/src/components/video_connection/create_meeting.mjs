@@ -30,7 +30,7 @@ const Create_meeting = () =>{
     const [pmsBtnDisabled, setPmsBtnDisabled] = useState("");
     const [cookies, setCookie] = useCookies(['token']);
     const [disabled, setdisabled] = useState(true);
-    const [username, setusername] = useState('Local Stream')
+    const [username, setusername] = useState('Local Stream'); 
     const localvideo = React.createRef();
     const navigate = useNavigate();
     useEffect(()=>{
@@ -46,7 +46,7 @@ const Create_meeting = () =>{
         if(matched !== null){
             const callId = firestore.collection('calls').doc().id;
             (await firestore.collection('calls').doc(callId).set({created: true}));
-            await sendEmail(emailinput.current.value, callId);
+            await sendEmail(cookies.token, emailinput.current.value, callId);
             navigate(`/meeting/${callId}`, {state: {video: localStream.getTracks().find(track => track.kind === 'video').enabled, 
                                                 audio: localStream.getTracks().find(track => track.kind === 'audio').enabled, 
                                                 callId: callId, privilege: "offer"}})
