@@ -3,6 +3,8 @@ import { Route, Routes, useNavigate } from "react-router-dom";
 import classnames from 'classnames';
 import firebase from 'firebase/compat/app';
 import { sendEmail } from '../../services/sendGridApiService.js';
+import { useCookies } from 'react-cookie';
+import { signup, login, logout, me } from '../../services/userApiService.js';
 const firebaseConfig = {
     apiKey: "AIzaSyDeiAhAi21ev36X-B0z9_sN4YexK7o1VY4",
     authDomain: "project-snack-overflow.firebaseapp.com",
@@ -26,9 +28,18 @@ const Create_meeting = () =>{
     const [cameraIcon, setCameraIcon] = useState("camera-on-icon");
     const [iconDisabled, setIconDisabled] = useState("disabled");
     const [pmsBtnDisabled, setPmsBtnDisabled] = useState("");
+    const [cookies, setCookie] = useCookies(['token']);
     const [disabled, setdisabled] = useState(true);
+    const [username, setusername] = useState('Local Stream')
     const localvideo = React.createRef();
     const navigate = useNavigate();
+    useEffect(()=>{
+        const getusername = async()=>{
+            const response = await me(cookies.token);
+            setusername(response.user.name);
+        }
+        getusername();
+    }, []);
     const handleClick = async () => {
         const regex =  /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
         const matched = emailinput.current.value.match(regex);
@@ -75,7 +86,7 @@ const Create_meeting = () =>{
         <div className='videos_display'>
             <h3>Video Preview</h3>
             <div className='video_container'>
-                <p className='overlay_text'>Local Stream</p>
+                <p className='overlay_text'>{username}</p>
                 <video ref={localvideo} autoPlay playsInline muted="muted"></video>
 
             </div>

@@ -9,6 +9,8 @@ import { useEffect } from 'react';
 import {translate} from '../../services/translateApiService.js';
 import Chat from '../chat/chat.mjs';import { useNavigate } from 'react-router-dom';
 import './meeting.css';
+import { useCookies } from "react-cookie";
+
 const firebaseConfig = {
   apiKey: "AIzaSyDeiAhAi21ev36X-B0z9_sN4YexK7o1VY4",
   authDomain: "project-snack-overflow.firebaseapp.com",
@@ -63,6 +65,7 @@ function Video_connection({transcription_text, recognition}) {
   const data = useLocation();
   const navigate = useNavigate();
   useEffect(() => {
+    
     const webcam_on = async () => {
       localStream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
       localStream.getTracks().find(track => track.kind === 'audio').enabled = data.state.audio;
