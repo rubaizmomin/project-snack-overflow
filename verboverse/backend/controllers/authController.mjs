@@ -66,12 +66,6 @@ export async function signin (req, res, next) {
 const sendTokenResponse = async(user, codeStatus, res) => {
     const token = await user.getJwtToken();
     res.status(codeStatus)
-    // .cookie('token', token, {
-    //     maxAge: 60*60*1000, // 1 hour
-    //     httpOnly: true,
-    //     sameSite: 'None'
-    //     // signed: true
-    // })
     .json({
         success: true,
         id: user._id,
@@ -91,14 +85,37 @@ export function logout (req, res, next) {
 
 // user profile
 export async function userProfile(req, res, next) { 
-    console.log("what's going on");
     const user = await User.findById(req.user._id).select("-password");
-
-    // const authtoken = req.signedCookies.token;
-    // console.log("Hi"); 
-    // console.log(authtoken);
     res.status(200).json({
         success: true,
         user
+    })
+}
+
+// update user profile
+export async function updateUserProfile(req, res, next) {
+    const query = { _id: req.body._id };
+    const user = await User.findById(req.body._id).select("-password");
+    if (!user) {
+        return next(new ErrorResponse("User not found", 404));
+    }
+    user.name = req.body.name || user.name;
+    user.email = req.body.email || user.email;
+    user.language = req.body.language || user.language;
+    const updatedUser = await User.findOneAndUpdate(
+        query,
+        {
+            $set: {
+                name: user.name,
+                email: user.email,
+                language: user.language,
+            }
+        }, 
+        {returnDocument: 'after'}
+    ); 
+
+    res.status(200).json({
+        success: true,
+        updatedUser
     })
 }
