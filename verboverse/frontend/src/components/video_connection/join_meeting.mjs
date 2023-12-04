@@ -91,7 +91,6 @@ const Join_meeting = () =>{
         // get the callID that the invitee shared and access the data
         const callId = callinput.current.value;
         if(callId === ""){
-          console.log("WRONG MEETING ID");
           return;
         }
         const callDoc = firestore.collection('calls').doc(callId);
@@ -99,7 +98,6 @@ const Join_meeting = () =>{
         const callData = (await callDoc.get()).data();
         // set the invitee's sdp as remoteDescription
         if(callData === undefined){
-          console.log("WRONG MEETING ID");
           return;
         }
         handleClick();

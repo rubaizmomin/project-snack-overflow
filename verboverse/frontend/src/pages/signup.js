@@ -23,7 +23,6 @@ export default function SignUp() {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
     const response = await signup(data.get('firstName') + ' ' + data.get('lastName'), data.get('email'), data.get('password'));
-    console.log(response);
     if (response.success) {
         toast.success("Successfully signed up!"); 
         directToHome();
