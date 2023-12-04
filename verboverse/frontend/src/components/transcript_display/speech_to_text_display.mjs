@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import Video_connection from '../video_connection/video_connection.mjs';
 import { useCookies } from "react-cookie";
-import { signup, login, logout, me } from '../../services/userApiService.js';
 import { useNavigate } from 'react-router-dom';
 let SpeechRecognition = window.webkitSpeechRecognition;
 let recognition = new SpeechRecognition();
@@ -78,9 +77,6 @@ function Transcript() {
   return(
     <div id="results">
       <Video_connection transcription_text={interimSpan} recognition={recognition}/>
-        {/* <span id="info"> ({info}):<br /></span> */}
-        {/* <span id="finalSpan" style={{color:'black'}}>{finalSpan}</span> */}
-        <span id="interimSpan" style={{color:'blue'}}>{interimSpan}</span>
     </div>
   );
 }

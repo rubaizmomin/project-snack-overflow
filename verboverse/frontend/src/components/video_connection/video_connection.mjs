@@ -217,9 +217,7 @@ function Video_connection({transcription_text, recognition}) {
       try {
           const response = await me(cookies.token);
           if (response.success) {
-            console.log(response.user);
             setlocalusername(response.user.name);
-            console.log(response.user.language.split(':')[1]);
             recognition.lang = response.user.language.split(':')[1];
             settarget(response.user.language.split(':')[1]);
           }
