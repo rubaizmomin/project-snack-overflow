@@ -37,7 +37,7 @@ const userSchema = new mongoose.Schema({
     }, 
     language: {
         type: String,
-        default: 'en'
+        default: 'English:en-CA'
     },
 }, {timestamps: true});
 
