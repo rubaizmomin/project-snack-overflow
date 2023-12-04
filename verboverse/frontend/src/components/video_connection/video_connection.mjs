@@ -270,12 +270,11 @@ function Video_connection({transcription_text, recognition}) {
         channel.send(transcription_text);
     }
   }, [transcription_text]);
-  const onDataChannelReady = ()=>{
-    if(sendusernamechannel.readyState === 'ready'){
+  useEffect(()=>{
+    if(sendusernamechannel.readyState === 'open'){
       sendusernamechannel.send(localusername);
     }
-  }
-  sendusernamechannel.addEventListener('ready', onDataChannelReady);
+  }, [sendusernamechannel.readyState])
   sendusernamechannel.onmessage = (event) =>{
     setremoteusername(event.data);
   }
