@@ -4,6 +4,7 @@ import { Avatar, Drawer, Sheet, DialogTitle, ModalClose, Divider, DialogContent,
          MenuItem, Button, MenuList, styled } from '@mui/joy';
 import { langs } from './languages.mjs';
 import { me, updateLanguage } from '../../services/userApiService.js';
+import LanguageDropdown from '../language_dropdown/language_dropdown.mjs';
 import './account_profile.css';
 import { useCookies } from "react-cookie";
 
@@ -12,7 +13,6 @@ const Popup = styled(Popper)({
 });
 
 const AccountProfile = () => {
-    const buttonRef = useRef(null);
     const [openProfile, setOpenProfile] = useState(false);
     const [openDropdown, setOpenDropdown] = useState(false);
     const [language, setLanguage] = useState('English');
