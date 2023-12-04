@@ -1,13 +1,13 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
+import { useRef } from 'react';
 import { Popper, ClickAwayListener } from '@mui/base';
 import { Avatar, Drawer, Sheet, DialogTitle, ModalClose, Divider, DialogContent, Typography,
          MenuItem, Button, MenuList, styled } from '@mui/joy';
-import { langs } from './languages.mjs';
 import { me, updateLanguage } from '../../services/userApiService.js';
 import LanguageDropdown from '../language_dropdown/language_dropdown.mjs';
-import './account_profile.css';
+import '../language_dropdown/language_dropdown.css';
 import { useCookies } from "react-cookie";
-
+import { langs } from '../language_dropdown/languages.mjs';
 const Popup = styled(Popper)({
     zIndex: 1000,
 });
@@ -20,7 +20,7 @@ const AccountProfile = () => {
     const [cookies, setCookie] = useCookies(['token']);
     const [username, setusername] = useState('Local Stream');
     const [email, setemail] = useState('Local Stream email');
-
+    const buttonRef = useRef(null);
     useEffect(() => {
         const fetchUser = async () => {
             let retryCount = 0;

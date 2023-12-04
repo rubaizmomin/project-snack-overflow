@@ -52,8 +52,8 @@ const localvideo = React.createRef();
 const remotevideo = React.createRef();
 let localStream;
 let remoteStream;
-function Video_connection({transcription_text, recognition}) {
-  const target = 'fr';
+function Video_connection({transcription_text, recognition, targetlanguage}) {
+  const target = targetlanguage;
   const [micIcon, setMicIcon] = useState("unmute-icon");
   const [cameraIcon, setCameraIcon] = useState("camera-on-icon");
   const [transcriptIcon, setTranscriptIcon] = useState("transcript-on-icon");
