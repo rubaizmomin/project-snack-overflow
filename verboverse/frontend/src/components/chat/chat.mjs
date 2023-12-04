@@ -7,11 +7,15 @@ import {
     Message,
     MessageInput,
   } from "@chatscope/chat-ui-kit-react";
+import { useCookies } from "react-cookie";
+
 import './chat.css';
 const Chat = ({channel, targetlanguage}) =>{
     const [messageinput, setMessageInput] = useState('');
     const [disabled, setdisabled] = useState(true);
     const [messages, setMessages] = useState([]);
+    const [cookies, setCookie] = useCookies(['token']);
+
     const chatchannel = channel;
     chatchannel.onopen = () => {
         setdisabled(false);
@@ -30,7 +34,7 @@ const Chat = ({channel, targetlanguage}) =>{
         }
     }
     chatchannel.onmessage = (event) =>{
-        translate(event.data, targetlanguage).then((translatedmessage)=>{
+        translate(cookies.token, event.data, targetlanguage).then((translatedmessage)=>{
             const newMessage = {
                 message: translatedmessage.translation,
                 direction: "incoming",
