@@ -62,7 +62,6 @@ function Video_connection({transcription_text, recognition}) {
   const meetingId = window.location.href.split("/")[4];
   const data = useLocation();
   const navigate = useNavigate();
-  console.log(pc.remoteDescription);
   useEffect(() => {
     const webcam_on = async () => {
       localStream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
@@ -133,8 +132,8 @@ function Video_connection({transcription_text, recognition}) {
           try{
             await pc.setRemoteDescription(answerDescription);
           }catch(e){
-            console.log(e);
-            console.log("I KNEW IT");
+            navigate('/error', {state:{errormessage: "Please do not leave or refresh the meeting page."}})
+            return;
           }
         }
       });  
@@ -170,8 +169,12 @@ function Video_connection({transcription_text, recognition}) {
         return;
       }
       const offerDescription = callData.offer;
-      await pc.setRemoteDescription(new RTCSessionDescription(offerDescription));
-    
+      try{
+        await pc.setRemoteDescription(new RTCSessionDescription(offerDescription));
+      }catch(e){
+        navigate("/error", {state: {errormessage:"Please do not leave or refresh the meeting page."}})
+        return;
+      }
       //create sdp for answerer and store in its localDescription
       const answerDescription = await pc.createAnswer();
       await pc.setLocalDescription(answerDescription);
@@ -200,7 +203,7 @@ function Video_connection({transcription_text, recognition}) {
         throw new Error();
       }
       if(((await firestore.collection('calls').doc(meetingId).get()).data().answer) !== undefined){
-        error = "You cannot join the meeting again. Please do not refresh the ongoing meeting."
+        error = "You cannot join the meeting again. Please do not refresh the ongoing meeting. This app only supports 2 person meeting."
         throw new Error();
       }
     }
@@ -282,7 +285,6 @@ function Video_connection({transcription_text, recognition}) {
   useEffect(()=>{
     if(transcription_text === '')
       return;
-    console.log(transcription_text);
     if(channel.readyState === 'open'){
       if(micIcon === "unmute-icon") // audio is on
         channel.send(transcription_text);

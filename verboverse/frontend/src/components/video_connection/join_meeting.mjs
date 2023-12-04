@@ -45,6 +45,13 @@ const Join_meeting = () =>{
                                     callId: callinput.current.value, privilege: "answer"}});
     }
     useEffect(()=>{
+        const reloadCount = sessionStorage.getItem('reloadCount');
+        if(reloadCount < 1) {
+            sessionStorage.setItem('reloadCount', String(reloadCount + 1));
+            window.location.reload();
+        } else {
+            sessionStorage.removeItem('reloadCount');
+        }
         let meetingId = window.location.href.split("/")[4];
         if(meetingId === undefined)
             meetingId = "";
