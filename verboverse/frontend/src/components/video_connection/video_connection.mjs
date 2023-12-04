@@ -219,8 +219,9 @@ function Video_connection({transcription_text, recognition}) {
           if (response.success) {
             console.log(response.user);
             setlocalusername(response.user.name);
-            recognition.lang = response.user.language;
-            settarget(response.user.language);
+            console.log(response.user.language.split(':')[1]);
+            recognition.lang = response.user.language.split(':')[1];
+            settarget(response.user.language.split(':')[1]);
           }
           else{
             navigate('/');
