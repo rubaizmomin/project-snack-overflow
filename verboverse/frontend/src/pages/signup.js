@@ -104,7 +104,7 @@ export default function SignUp() {
                 />
               </Grid>
               <Grid item xs={12}>
-                <LanguageDropdown />
+                {/* <LanguageDropdown /> */}
               </Grid>
             </Grid>
             <Button

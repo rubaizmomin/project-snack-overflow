@@ -1,27 +1,17 @@
 import React, { useState, useEffect } from 'react';
-import { useRef } from 'react';
-import { Popper, ClickAwayListener } from '@mui/base';
-import { Avatar, Drawer, Sheet, DialogTitle, ModalClose, Divider, DialogContent, Typography,
-         MenuItem, Button, MenuList, styled } from '@mui/joy';
+import { Avatar, Drawer, Sheet, DialogTitle, ModalClose, Divider, DialogContent, Typography } from '@mui/joy';
 import { me, updateLanguage } from '../../services/userApiService.js';
 import LanguageDropdown from '../language_dropdown/language_dropdown.mjs';
 import '../language_dropdown/language_dropdown.css';
 import { useCookies } from "react-cookie";
-import { langs } from '../language_dropdown/languages.mjs';
 import { useNavigate } from 'react-router-dom';
-const Popup = styled(Popper)({
-    zIndex: 1000,
-});
 
 const AccountProfile = () => {
     const [openProfile, setOpenProfile] = useState(false);
-    const [openDropdown, setOpenDropdown] = useState(false);
-    const [language, setLanguage] = useState('English');
     const [user, setUser] = useState(null);
     const [cookies, setCookie] = useCookies(['token']);
     const [username, setusername] = useState('Local Stream');
     const [email, setemail] = useState('Local Stream email');
-    const buttonRef = useRef(null);
     const navigate = useNavigate();
     useEffect(() => {
         const fetchUser = async () => {
@@ -53,24 +43,9 @@ const AccountProfile = () => {
         fetchUser();
     }, []);
 
-    const handleCloseDropdown = () => {
-        setOpenDropdown(false);
-      };
-    
-    const handleListKeyDown = (event) => {
-        if (event.key === 'Tab') {
-        setOpenDropdown(false);
-        } else if (event.key === 'Escape') {
-        buttonRef.current.focus();
-        setOpenDropdown(false);
-        }
-    };
-
-    const handleLanguageChange = (language) => {
-        handleCloseDropdown(); 
-        setLanguage(language);
+    const getNewLanguage = (language, lang_id) => {
         const id = user._id;
-        updateLanguage(cookies.token, id, language);
+        updateLanguage(cookies.token, id, language+':'+lang_id);
     }
 
     return(
@@ -112,59 +87,7 @@ const AccountProfile = () => {
                         <Typography align="left" level="title-md" fontWeight="bold" sx={{ mt: 1, mr: 1 }}>
                             Email: {email}
                         </Typography>
-                        <div id="language_select">
-                        <Typography align="left" level="title-md" fontWeight="bold" sx={{ mt: 1, mr: 1 }}>
-                            Primary Language:
-                        </Typography>
-                        
-                            <Button
-                                ref={buttonRef}
-                                id="composition-button"
-                                aria-controls={'composition-menu'}
-                                aria-haspopup="true"
-                                aria-expanded={openDropdown ? 'true' : undefined}
-                                variant="outlined"
-                                color="neutral"
-                                onClick={() => {
-                                    setOpenDropdown(!openDropdown);
-                                }}
-                            >
-                                {language}
-                            </Button>
-                            <Popup
-                                role={undefined}
-                                id="composition-menu"
-                                open={openDropdown}
-                                anchorEl={buttonRef.current}
-                                disablePortal
-                                modifiers={[
-                                {
-                                    name: 'offset',
-                                    options: {
-                                    offset: [0, 4],
-                                    },
-                                },
-                                ]}
-                            >
-                                    <ClickAwayListener
-                                    onClickAway={(event) => {
-                                        if (event.target !== buttonRef.current) {
-                                        handleCloseDropdown();
-                                        }
-                                    }}
-                                    >
-                                    <MenuList
-                                        variant="outlined"
-                                        onKeyDown={handleListKeyDown}
-                                        sx={{ boxShadow: 'md' }}
-                                    >
-                                        {langs.map(([lang, [id]]) => (
-                                            <MenuItem key={id} onClick={ () => { handleLanguageChange(lang) }}>{lang}</MenuItem>
-                                        ))}
-                                    </MenuList>
-                                    </ClickAwayListener>
-                            </Popup>
-                        </div>
+                        <LanguageDropdown onLanguageChange={getNewLanguage} />
                     </DialogContent>
                 </Sheet>
             </Drawer>
