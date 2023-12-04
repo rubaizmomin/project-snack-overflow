@@ -8,6 +8,7 @@ import LanguageDropdown from '../language_dropdown/language_dropdown.mjs';
 import '../language_dropdown/language_dropdown.css';
 import { useCookies } from "react-cookie";
 import { langs } from '../language_dropdown/languages.mjs';
+import { useNavigate } from 'react-router-dom';
 const Popup = styled(Popper)({
     zIndex: 1000,
 });
@@ -21,6 +22,7 @@ const AccountProfile = () => {
     const [username, setusername] = useState('Local Stream');
     const [email, setemail] = useState('Local Stream email');
     const buttonRef = useRef(null);
+    const navigate = useNavigate();
     useEffect(() => {
         const fetchUser = async () => {
             let retryCount = 0;
@@ -36,6 +38,10 @@ const AccountProfile = () => {
                         setemail(response.user.email);
                         break;
                     }
+                    else{
+                        navigate('/');
+                        return;
+                    }
                 } catch (error) {
                     console.error('Error fetching user:', error);
                 }
@@ -44,7 +50,6 @@ const AccountProfile = () => {
                 retryCount++;
             }
         };
-
         fetchUser();
     }, []);
 

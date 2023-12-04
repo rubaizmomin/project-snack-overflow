@@ -204,20 +204,34 @@ function Video_connection({transcription_text, recognition, targetlanguage}) {
         throw new Error();
       }
     }
-    checksecurity().catch((e)=>{
-      navigate('/error', {state: {errormessage:error}});
-      return;
-    });
-    const getusername = async()=>{
-      const response = await me(cookies.token);
-      setlocalusername(response.user.name);
-    }
-    getusername();
-    webcam_on().then(()=>{
-      connectmeeting().then(() => {
-        answermeeting();
+    const fetchUser = async () => {
+      try {
+          const response = await me(cookies.token);
+          if (response.success) {
+            setlocalusername(response.user.name);
+          }
+          else{
+            navigate('/');
+            throw Error("Not signed in");
+          }
+      } catch (error) {
+          throw Error('Error fetching user:', error);
+      }
+    };
+    fetchUser().then(()=>{
+      checksecurity().catch((e)=>{
+        navigate('/error', {state: {errormessage:error}});
+        return;
+      });
+      webcam_on().then(()=>{
+        connectmeeting().then(() => {
+          answermeeting();
+        })
+      });
+    }).catch((e)=>{
+        navigate('/');
+        return;
       })
-    });
   }, []); // Empty dependency array means this effect will run only once, on component mount
   const togglemute = async () => {
     if(localStream.getTracks().find(track => track.kind === 'audio').enabled){

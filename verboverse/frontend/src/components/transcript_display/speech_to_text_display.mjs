@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import Video_connection from '../video_connection/video_connection.mjs';
 import { useCookies } from "react-cookie";
 import { signup, login, logout, me } from '../../services/userApiService.js';
+import { useNavigate } from 'react-router-dom';
 let SpeechRecognition = window.webkitSpeechRecognition;
 let recognition = new SpeechRecognition();
 recognition.continuous = true;
@@ -18,6 +19,7 @@ function Transcript() {
   const [info, setInfo] = useState('Off');
   const [interimSpan, setInterimSpan] = useState('');
   const [finalSpan, setFinalSpan] = useState('');
+  const navigate = useNavigate();
   useEffect(() => {
     recognition.onstart = function() {
       recognizing = true;
@@ -66,12 +68,33 @@ function Transcript() {
   });
 
   useEffect(()=>{
-    me(cookies.token).then((response)=>{
-      console.log(response);
-      recognition.lang = response.user.language;
-      recognition.start();
-      start_timestamp = performance.now();
-    })
+    const fetchUser = async () => {
+      let retryCount = 0;
+      const maxRetries = 3; 
+
+      while (retryCount < maxRetries) {
+          try {
+              const response = await me(cookies.token);
+
+              if (response.success) {
+                  recognition.lang = response.user.language;
+                  break;
+              }
+              else{
+                  navigate('/');
+                  return;
+              }
+          } catch (error) {
+              console.error('Error fetching user:', error);
+          }
+
+          await new Promise(resolve => setTimeout(resolve, 3000));
+          retryCount++;
+      }
+    };
+    fetchUser();
+    recognition.start();
+    start_timestamp = performance.now();
     setInterval(()=>{
       finalTranscript = '';
     }, 5000);
