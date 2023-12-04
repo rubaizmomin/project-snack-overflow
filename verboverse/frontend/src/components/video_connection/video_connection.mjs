@@ -52,14 +52,14 @@ const localvideo = React.createRef();
 const remotevideo = React.createRef();
 let localStream;
 let remoteStream;
-function Video_connection({transcription_text, recognition, targetlanguage}) {
-  const target = targetlanguage;
+function Video_connection({transcription_text, recognition}) {
   const [micIcon, setMicIcon] = useState("unmute-icon");
   const [cameraIcon, setCameraIcon] = useState("camera-on-icon");
   const [transcriptIcon, setTranscriptIcon] = useState("transcript-on-icon");
   const [iconDisabled, setIconDisabled] = useState("disabled");
   const [disabled, setdisabled] = useState(true);
   const [text, settext] = useState('');
+  const [target, settarget] = useState('en-CA');
   const [cookies, setCookie] = useCookies(['token']);
   const [localusername, setlocalusername] = useState('Local Stream');
   const [remoteusername, setremoteusername] = useState('Remote Stream');
@@ -209,6 +209,8 @@ function Video_connection({transcription_text, recognition, targetlanguage}) {
           const response = await me(cookies.token);
           if (response.success) {
             setlocalusername(response.user.name);
+            recognition.lang = response.user.language;
+            settarget(response.user.language);
           }
           else{
             navigate('/');

@@ -15,7 +15,6 @@ let start_timestamp;
 
 function Transcript() {
   const [cookies, setCookie] = useCookies(['token']);
-  const [languageChosen, setlanguageChosen] = useState('en-CA');
   const [info, setInfo] = useState('Off');
   const [interimSpan, setInterimSpan] = useState('');
   const [finalSpan, setFinalSpan] = useState('');
@@ -68,31 +67,6 @@ function Transcript() {
   });
 
   useEffect(()=>{
-    const fetchUser = async () => {
-      let retryCount = 0;
-      const maxRetries = 3; 
-
-      while (retryCount < maxRetries) {
-          try {
-              const response = await me(cookies.token);
-
-              if (response.success) {
-                  recognition.lang = response.user.language;
-                  break;
-              }
-              else{
-                  navigate('/');
-                  return;
-              }
-          } catch (error) {
-              console.error('Error fetching user:', error);
-          }
-
-          await new Promise(resolve => setTimeout(resolve, 3000));
-          retryCount++;
-      }
-    };
-    fetchUser();
     recognition.start();
     start_timestamp = performance.now();
     setInterval(()=>{
@@ -102,7 +76,7 @@ function Transcript() {
 
   return(
     <div id="results">
-      <Video_connection transcription_text={interimSpan} recognition={recognition} targetlanguage={languageChosen}/>
+      <Video_connection transcription_text={interimSpan} recognition={recognition}/>
         {/* <span id="info"> ({info}):<br /></span> */}
         {/* <span id="finalSpan" style={{color:'black'}}>{finalSpan}</span> */}
         <span id="interimSpan" style={{color:'blue'}}>{interimSpan}</span>
