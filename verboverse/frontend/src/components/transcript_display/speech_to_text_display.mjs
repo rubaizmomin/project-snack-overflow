@@ -67,7 +67,8 @@ function Transcript() {
   });
 
   useEffect(()=>{
-    recognition.start();
+    if(recognizing === false)
+      recognition.start();
     start_timestamp = performance.now();
     setInterval(()=>{
       finalTranscript = '';

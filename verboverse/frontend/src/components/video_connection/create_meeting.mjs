@@ -74,7 +74,15 @@ const Create_meeting = () =>{
         else
             console.log("NOT AN EMAIL OR NOT REGISTERED");
     }
-    
+    useEffect(() =>{
+        const reloadCount = sessionStorage.getItem('reloadCount');
+        if(reloadCount < 1) {
+          sessionStorage.setItem('reloadCount', String(reloadCount + 1));
+          window.location.reload();
+        } else {
+          sessionStorage.removeItem('reloadCount');
+        }
+    }, []);
     const webcam = async () => {
         //get permissions for audio and video
         // replace HTML with video feedback object

@@ -129,13 +129,18 @@ function Video_connection({transcription_text, recognition}) {
       await callDoc.set({ offer });
     
       // listener for new candidatess added by remote user
-      callDoc.onSnapshot((snapshot) => {
+      callDoc.onSnapshot(async (snapshot) => {
         const data = snapshot.data();
         // check remote connection and if data was received
         if (!pc.currentRemoteDescription && data?.answer) {
           // set the answer SDP
           const answerDescription = new RTCSessionDescription(data.answer);
-          pc.setRemoteDescription(answerDescription);
+          try{
+            await pc.setRemoteDescription(answerDescription);
+          }catch(e){
+            navigate('/error', {state:{errormessage: "Please do not leave or refresh the meeting page."}})
+            return;
+          }
         }
       });  
       // Listen for remote ICE candidates
@@ -170,8 +175,12 @@ function Video_connection({transcription_text, recognition}) {
         return;
       }
       const offerDescription = callData.offer;
-      await pc.setRemoteDescription(new RTCSessionDescription(offerDescription));
-    
+      try{
+        await pc.setRemoteDescription(new RTCSessionDescription(offerDescription));
+      }catch(e){
+        navigate("/error", {state: {errormessage:"Please do not leave or refresh the meeting page."}})
+        return;
+      }
       //create sdp for answerer and store in its localDescription
       const answerDescription = await pc.createAnswer();
       await pc.setLocalDescription(answerDescription);
@@ -200,7 +209,7 @@ function Video_connection({transcription_text, recognition}) {
         throw new Error();
       }
       if(((await firestore.collection('calls').doc(meetingId).get()).data().answer) !== undefined){
-        error = "You cannot join the meeting again. Please do not refresh the ongoing meeting."
+        error = "You cannot join the meeting again. Please do not refresh the ongoing meeting. This app only supports 2 person meeting."
         throw new Error();
       }
     }
@@ -208,6 +217,7 @@ function Video_connection({transcription_text, recognition}) {
       try {
           const response = await me(cookies.token);
           if (response.success) {
+            console.log(response.user);
             setlocalusername(response.user.name);
             recognition.lang = response.user.language;
             settarget(response.user.language);
@@ -317,7 +327,6 @@ function Video_connection({transcription_text, recognition}) {
   useEffect(()=>{
     if(transcription_text === '')
       return;
-    console.log(transcription_text);
     if(channel.readyState === 'open'){
       if(micIcon === "unmute-icon") // audio is on
         channel.send(transcription_text);
