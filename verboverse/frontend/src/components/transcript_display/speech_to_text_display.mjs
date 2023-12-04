@@ -66,6 +66,21 @@ function Transcript() {
   });
 
   useEffect(()=>{
+    const fetchUser = async () => {
+      try {
+          const response = await me(cookies.token);
+          if (response.success) {
+            recognition.lang = response.user.language.split(':')[1];
+          }
+          else{
+            navigate('/');
+            throw Error("Not signed in");
+          }
+      } catch (error) {
+          throw Error('Error fetching user:', error);
+      }
+    };
+    fetchUser();
     if(recognizing === false)
       recognition.start();
     start_timestamp = performance.now();
