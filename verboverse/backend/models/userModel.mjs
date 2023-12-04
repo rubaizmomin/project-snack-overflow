@@ -34,7 +34,11 @@ const userSchema = new mongoose.Schema({
     calls: {
         type: [Call.schema],
         ref: 'Call'
-    }
+    }, 
+    language: {
+        type: String,
+        default: 'English:en-CA'
+    },
 }, {timestamps: true});
 
 // encrypt password before saving to database

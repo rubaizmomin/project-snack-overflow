@@ -3,6 +3,8 @@ import { Route, Routes, useNavigate } from "react-router-dom";
 import classnames from 'classnames';
 import firebase from 'firebase/compat/app';
 import { sendEmail } from '../../services/sendGridApiService.js';
+import { useCookies } from 'react-cookie';
+import { signup, login, logout, me } from '../../services/userApiService.js';
 const firebaseConfig = {
     apiKey: "AIzaSyDeiAhAi21ev36X-B0z9_sN4YexK7o1VY4",
     authDomain: "project-snack-overflow.firebaseapp.com",
@@ -26,16 +28,45 @@ const Create_meeting = () =>{
     const [cameraIcon, setCameraIcon] = useState("camera-on-icon");
     const [iconDisabled, setIconDisabled] = useState("disabled");
     const [pmsBtnDisabled, setPmsBtnDisabled] = useState("");
+    const [cookies, setCookie] = useCookies(['token']);
     const [disabled, setdisabled] = useState(true);
+    const [username, setusername] = useState('Local Stream'); 
     const localvideo = React.createRef();
     const navigate = useNavigate();
+    useEffect(()=>{
+        const fetchUser = async () => {
+            let retryCount = 0;
+            const maxRetries = 3; 
+
+            while (retryCount < maxRetries) {
+                try {
+                    const response = await me(cookies.token);
+
+                    if (response.success) {
+                        setusername(response.user.name);
+                        break;
+                    }
+                    else{
+                        navigate('/');
+                        return;
+                    }
+                } catch (error) {
+                    console.error('Error fetching user:', error);
+                }
+
+                await new Promise(resolve => setTimeout(resolve, 3000));
+                retryCount++;
+            }
+        };
+        fetchUser();
+    }, []);
     const handleClick = async () => {
         const regex =  /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
         const matched = emailinput.current.value.match(regex);
         if(matched !== null){
             const callId = firestore.collection('calls').doc().id;
             (await firestore.collection('calls').doc(callId).set({created: true}));
-            await sendEmail(emailinput.current.value, callId);
+            await sendEmail(cookies.token, emailinput.current.value, callId);
             navigate(`/meeting/${callId}`, {state: {video: localStream.getTracks().find(track => track.kind === 'video').enabled, 
                                                 audio: localStream.getTracks().find(track => track.kind === 'audio').enabled, 
                                                 callId: callId, privilege: "offer"}})
@@ -83,7 +114,7 @@ const Create_meeting = () =>{
         <div className='videos_display'>
             <h3>Video Preview</h3>
             <div className='video_container'>
-                <p className='overlay_text'>Local Stream</p>
+                <p className='overlay_text'>{username}</p>
                 <video ref={localvideo} autoPlay playsInline muted="muted"></video>
 
             </div>

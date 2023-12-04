@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import Video_connection from '../video_connection/video_connection.mjs';
-
+import { useCookies } from "react-cookie";
+import { signup, login, logout, me } from '../../services/userApiService.js';
+import { useNavigate } from 'react-router-dom';
 let SpeechRecognition = window.webkitSpeechRecognition;
 let recognition = new SpeechRecognition();
 recognition.continuous = true;
@@ -10,12 +12,13 @@ let recognizing = false;
 let finalTranscript = '';
 let ignore_onend;
 let start_timestamp;
-var languageChosen = 'en-CA';
 
 function Transcript() {
+  const [cookies, setCookie] = useCookies(['token']);
   const [info, setInfo] = useState('Off');
   const [interimSpan, setInterimSpan] = useState('');
   const [finalSpan, setFinalSpan] = useState('');
+  const navigate = useNavigate();
   useEffect(() => {
     recognition.onstart = function() {
       recognizing = true;
@@ -64,7 +67,6 @@ function Transcript() {
   });
 
   useEffect(()=>{
-    recognition.lang = languageChosen;
     if(recognizing === false)
       recognition.start();
     start_timestamp = performance.now();

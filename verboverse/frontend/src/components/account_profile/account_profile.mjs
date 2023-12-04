@@ -1,9 +1,52 @@
-import React, { useState } from 'react';
-import { Avatar, Drawer, Sheet, DialogTitle, ModalClose, Divider, DialogContent, Typography} from '@mui/joy';
+import React, { useState, useEffect } from 'react';
+import { Avatar, Drawer, Sheet, DialogTitle, ModalClose, Divider, DialogContent, Typography } from '@mui/joy';
+import { me, updateLanguage } from '../../services/userApiService.js';
 import LanguageDropdown from '../language_dropdown/language_dropdown.mjs';
+import '../language_dropdown/language_dropdown.css';
+import { useCookies } from "react-cookie";
+import { useNavigate } from 'react-router-dom';
 
 const AccountProfile = () => {
     const [openProfile, setOpenProfile] = useState(false);
+    const [user, setUser] = useState(null);
+    const [cookies, setCookie] = useCookies(['token']);
+    const [username, setusername] = useState('Local Stream');
+    const [email, setemail] = useState('Local Stream email');
+    const navigate = useNavigate();
+    useEffect(() => {
+        const fetchUser = async () => {
+            let retryCount = 0;
+            const maxRetries = 3; 
+
+            while (retryCount < maxRetries) {
+                try {
+                    const response = await me(cookies.token);
+
+                    if (response.success) {
+                        setUser(response.user);
+                        setusername(response.user.name);
+                        setemail(response.user.email);
+                        break;
+                    }
+                    else{
+                        navigate('/');
+                        return;
+                    }
+                } catch (error) {
+                    console.error('Error fetching user:', error);
+                }
+
+                await new Promise(resolve => setTimeout(resolve, 3000));
+                retryCount++;
+            }
+        };
+        fetchUser();
+    }, []);
+
+    const getNewLanguage = (language, lang_id) => {
+        const id = user._id;
+        updateLanguage(cookies.token, id, language+':'+lang_id);
+    }
 
     return(
         <div>
@@ -39,12 +82,12 @@ const AccountProfile = () => {
                     <Divider sx={{ mt: 'auto' }} />
                     <DialogContent sx={{ gap: 2 }}>
                         <Typography align="left" level="title-md" fontWeight="bold" sx={{ mt: 1, mr: 1 }}>
-                            Username:
+                            Username: {username}
                         </Typography>
                         <Typography align="left" level="title-md" fontWeight="bold" sx={{ mt: 1, mr: 1 }}>
-                            Email:
+                            Email: {email}
                         </Typography>
-                        <LanguageDropdown />
+                        <LanguageDropdown onLanguageChange={getNewLanguage} />
                     </DialogContent>
                 </Sheet>
             </Drawer>

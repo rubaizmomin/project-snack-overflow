@@ -4,6 +4,9 @@ import { useEffect } from 'react';
 import classnames from 'classnames';
 import 'firebase/compat/firestore';
 import firebase from 'firebase/compat/app';
+import { useCookies } from 'react-cookie';
+import { signup, login, logout, me } from '../../services/userApiService.js';
+import { fetchUser } from '../account_profile/account_profile.mjs';
 const firebaseConfig = {
     apiKey: "AIzaSyDeiAhAi21ev36X-B0z9_sN4YexK7o1VY4",
     authDomain: "project-snack-overflow.firebaseapp.com",
@@ -21,14 +24,6 @@ const firebaseConfig = {
   
   const firestore = firebase.firestore();
   
-  const servers = {
-      iceServers: [
-        {
-          urls: ['stun:stun1.l.google.com:19302', 'stun:stun2.l.google.com:19302'],
-        },
-      ],
-      iceCandidatePoolSize: 10,
-    };
 let localStream;
 const callinput = React.createRef();
 const Join_meeting = () =>{
@@ -37,6 +32,8 @@ const Join_meeting = () =>{
     const [iconDisabled, setIconDisabled] = useState("disabled");
     const [pmsBtnDisabled, setPmsBtnDisabled] = useState("");
     const [disabled, setdisabled] = useState(true);
+    const [username, setusername] = useState('Local Stream');
+    const [cookies, setCookie] = useCookies(['token']);
     const localvideo = React.createRef();
     const navigate = useNavigate();
     const handleClick = () => {
@@ -45,6 +42,30 @@ const Join_meeting = () =>{
                                     callId: callinput.current.value, privilege: "answer"}});
     }
     useEffect(()=>{
+        const fetchUser = async () => {
+            let retryCount = 0;
+            const maxRetries = 3; 
+
+            while (retryCount < maxRetries) {
+                try {
+                    const response = await me(cookies.token);
+
+                    if (response.success) {
+                        setusername(response.user.name);
+                        break;
+                    }
+                    else{
+                        navigate('/');
+                        return;
+                    }
+                } catch (error) {
+                    console.error('Error fetching user:', error);
+                }
+                await new Promise(resolve => setTimeout(resolve, 3000));
+                retryCount++;
+            }
+        };
+        fetchUser();
         const reloadCount = sessionStorage.getItem('reloadCount');
         if(reloadCount < 1) {
             sessionStorage.setItem('reloadCount', String(reloadCount + 1));
@@ -105,7 +126,7 @@ const Join_meeting = () =>{
         <div className='videos_display'>
             <h3>Video Preview</h3>
             <div className='video_container'>
-                <p className='overlay_text'>Local Stream</p>
+                <p className='overlay_text'>{username}</p>
                 <video ref={localvideo} autoPlay playsInline muted="muted"></video>
             </div>
             <div className='video_button_display'>
