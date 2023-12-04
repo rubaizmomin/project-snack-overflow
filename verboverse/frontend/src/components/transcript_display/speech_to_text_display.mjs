@@ -65,7 +65,8 @@ function Transcript() {
 
   useEffect(()=>{
     recognition.lang = languageChosen;
-    recognition.start();
+    if(recognizing === false)
+      recognition.start();
     start_timestamp = performance.now();
     setInterval(()=>{
       finalTranscript = '';
