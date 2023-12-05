@@ -5,8 +5,7 @@ https://www.youtube.com/channel/UCImeVtxXlfZpA-G_bh6T_Sw
 
 ## Project URL
 
-verboverse.tech
-
+https://verboverse.vercel.app/
 ## Project Description
 
 _VerboVerse_ is an interactive web application that allows people from different cultural backgrounds and languages to communicate with each other effortlessly. The app offers users the option to create meetings with video and audio calling option. What makes this app an even more immersive experience for the users is that it serves as the platform for performing real time translation of the different languages so that people can overcome their language barriers. 
