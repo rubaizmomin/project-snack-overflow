@@ -50,9 +50,9 @@ Third Party API: WebSpeech API (Audio-to-Text), Google Translation(For translati
 
 **Task:** Describe the contribution of each team member to the project. Please provide the full name of each team member (but no student number). 
 
-Vanshika: Backend, Middleware, Backend API Service for Frontend, Login and Sign up, MemCache, CSS for the application, SendGrid, Account Profile, Backend Schema
-Cindy: WebSpeech API, Google Translation, Chat Box, CSS for the application, Data State for various functionalities (Audio, Video,  Transcription), Language Mapping, Account Profile
-Rubaiz: Meeting Connection, Google Translation, Data Channels, Chat Box, Video Preview Meeting, WebSpeechAPI, Error handling, Security for frontend endpoints, Backend CORS
+Vanshika Virmani: Backend, Middleware, Backend API Service for Frontend, Login and Sign up, MemCache, CSS for the application, SendGrid, Account Profile, Backend Schema
+Cindy Ji: WebSpeech API, Google Translation, Chat Box, CSS for the application, Data State for various functionalities (Audio, Video,  Transcription), Language Mapping, Account Profile
+Rubaiz Momin: Meeting Connection, Google Translation, Data Channels, Chat Box, Video Preview Meeting, WebSpeechAPI, Error handling, Security for frontend endpoints, Backend CORS
 
 # One more thing? 
 
