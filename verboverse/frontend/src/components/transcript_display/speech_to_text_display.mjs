@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import Video_connection from '../video_connection/video_connection.mjs';
 import { useCookies } from "react-cookie";
 import { useNavigate } from 'react-router-dom';
+import { signup, login, logout, me } from '../../services/userApiService.js';
 let SpeechRecognition = window.webkitSpeechRecognition;
 let recognition = new SpeechRecognition();
 recognition.continuous = true;
@@ -66,8 +67,25 @@ function Transcript() {
   });
 
   useEffect(()=>{
-    if(recognizing === false)
-      recognition.start();
+    const fetchUser = async () => {
+      try {
+          const response = await me(cookies.token);
+          if (response.success) {
+            recognition.lang = response.user.language.split(':')[1];
+          }
+          else{
+            navigate('/');
+            throw Error("Not signed in");
+          }
+      } catch (error) {
+          throw Error('Error fetching user:', error);
+      }
+    };
+    fetchUser().then(()=>{
+      if(recognizing === false)
+        recognition.start();
+    })
+
     start_timestamp = performance.now();
     setInterval(()=>{
       finalTranscript = '';

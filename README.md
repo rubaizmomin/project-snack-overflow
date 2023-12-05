@@ -1,36 +1,11 @@
-# Deliverables
+# Verboverse
 
-### Project Title 
+## Project Video URL 
 
-VerboVerse
-
-### Team Members
-
-##### Rubaiz Momin - 1006903479
-##### Cindy Ji - 1006718223
-##### Vanshika Virmani - 1006865251
-
-
-### 5 Technical Challenges
-
-- Managing asynchronous translation when two users are having a conversation
-    - Will research more into implementing a message queue system for asynchronous processing of translation requests.
-    - Can also use Redis, or a caching system for storing frequently accessed translations to improve efficiency and performance of the application 
-- Allowing users to join the same meeting using WebRTC
-    - Sendgrid be used for sending emails for invitations to the individual calls. The person who 'created' a room will be allowed to invite other users (who must sign up for the website) to collaborate on the same room. This invitation will involve sending a Room ID (or a secret key / link) to the user for authorization purposes.
-- Due to limitations on the usage of Google Translation API and Speech-To-Text API, we need to figure out when a user is speaking to prevent unnecessary and irrelevant API calls.
-- Ensuring the detection language is correct so that the entire process of gathering the audio to displaying the correct text translation.
-- Figuring out how to use the Microsoft library for translating the documents, while preserving the original format will be a challenge.
 
 ## Project URL
 
 verboverse.tech
-
-**Task:** Provide the link to your deployed application. Please make sure the link works. 
-
-## Project Video URL 
-
-**Task:** Provide the link to your youtube video. Please make sure the link works. 
 
 ## Project Description
 
@@ -40,19 +15,23 @@ _VerboVerse_ is an interactive web application that allows people from different
 
 **Task:** Leaving deployment aside, explain how the app is built. Please describe the overall code design and be specific about the programming languages, framework, libraries and third-party api that you have used. \\
 
+The app first uses WebRTC for meeting connection between 2 users. We, then use WebSpeechAPI to convert audio to text. As soon as we get the text, we use the Google Translation API to translate to the remote user's preferred language and send data using WebRTC data channels. The chatbox feature works in the similar way.
+
 Here is the tech stack:
 
-### Technology Stack
+We used ReactJS for our framework as our application consisted of various components and we could leverage the component aspect of the ReactJS to build our application easily.
+We use the three layer framework architecture where the frontend communicates with the backend through API service to post and get various data and the backend communicates with the database to fulfil frontend's needs.
 
-- ReactJS for the Frontend
+- ReactJS for the Frontend (HTML, CSS, Javascript)
+- CSS Libraries: Mui, Chatscope
 - ExpressJS and NodeJS for Backend
 - Firebase for storing information about calls for WebRTC
 - MongoDB for Database
+- Third Party API: WebSpeech API (Audio-to-Text), Google Translation(For translation), SendGrid(Email Notification)
 
 ## Deployment
 
 **Task:** Explain how you have deployed your application. 
-
 - Google cloud for deploying backend
 - Versel for deploying the frontend of the application
 
@@ -61,12 +40,12 @@ Here is the tech stack:
 **Task:** What is the top 3 most challenging things that you have learned/developed for you app? Please restrict your answer to only three items. 
 
 1. It took a really long time for to figure out the authentication of our application. It was my first time using JWT tokens. I was easy to set up in the backend as we were attaching them as a cookie in the response when the user signs in. But it took me a while to figure out to access the token in the frontend, and send them through the middleware service for each endpoint that was accessable in the application. 
-2. 
-3. 
+2. The working of the webSpeechAPI along with Google Translation was challenging as we had to reset translation at some point for   subtitles to be concise in size.
+3. Deployment was very tricky because the endpoints for backend were not accessible. We learned how to debug and reset the configurations for nginx.
 
 ## Contributions
 
-**Task:** Describe the contribution of each team member to the project. Please provide the full name of each team member (but no student number). 
+=======
 Vanshika Virmani: 
     - Set up the backend using MongoDb 
     - Completed the pages for login and signin 
@@ -76,7 +55,24 @@ Vanshika Virmani:
     - Did a refactoring of frontend code to redesign the UI for landing page and home page
     - Integrated user authentication on frontend
     - Application deployment using Google Cloud Platform and Vercel
-    
+ Cindy Ji: 
+  - WebSpeech API
+  - Google Translation
+  - UI for Chat Box
+  - CSS for the application
+  - Data State for various functionalities (Audio, Video,  Transcription)
+  - Language Mapping
+  - Account Information
+ Rubaiz Momin: 
+  - Meeting Connection
+  - Google Translation
+  - Data Channels
+  - Chat Box Functionality
+  - Video Preview Meeting
+  - WebSpeechAPI 
+  - Security for frontend endpoints
+  - Backend CORS
+
 # One more thing? 
 
 **Task:** Any additional comment you want to share with the course staff? 
