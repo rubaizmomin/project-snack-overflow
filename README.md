@@ -1,7 +1,7 @@
 # Verboverse
 
 ## Project Video URL 
-
+https://www.youtube.com/channel/UCImeVtxXlfZpA-G_bh6T_Sw
 
 ## Project URL
 
