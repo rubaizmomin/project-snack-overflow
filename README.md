@@ -45,7 +45,6 @@ We use the three layer framework architecture where the frontend communicates wi
 
 ## Contributions
 
-=======
 Vanshika Virmani: 
     - Set up the backend using MongoDb 
     - Completed the pages for login and signin 
@@ -56,22 +55,22 @@ Vanshika Virmani:
     - Integrated user authentication on frontend
     - Application deployment using Google Cloud Platform and Vercel
  Cindy Ji: 
-  - WebSpeech API
-  - Google Translation
-  - UI for Chat Box
-  - CSS for the application
-  - Data State for various functionalities (Audio, Video,  Transcription)
-  - Language Mapping
-  - Account Information
+    - WebSpeech API
+    - Google Translation
+    - UI for Chat Box
+    - CSS for the application
+    - Data State for various functionalities (Audio, Video,  Transcription)
+    - Language Mapping
+    - Account Information
  Rubaiz Momin: 
-  - Meeting Connection
-  - Google Translation
-  - Data Channels
-  - Chat Box Functionality
-  - Video Preview Meeting
-  - WebSpeechAPI 
-  - Security for frontend endpoints
-  - Backend CORS
+    - Meeting Connection
+    - Google Translation
+    - Data Channels
+    - Chat Box Functionality
+    - Video Preview Meeting
+    - WebSpeechAPI 
+    - Security for frontend endpoints
+    - Backend CORS
 
 # One more thing? 
 
