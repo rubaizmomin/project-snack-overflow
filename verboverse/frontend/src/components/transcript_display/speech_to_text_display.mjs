@@ -63,7 +63,6 @@ function Transcript() {
       finalTranscript = capitalize(finalTranscript);
       setInterimSpan(linebreak(finalTranscript) + linebreak(interimTranscript));
       setFinalSpan(linebreak(finalTranscript));
-      console.log(finalTranscript);
     };
   });
 
@@ -73,7 +72,6 @@ function Transcript() {
           const response = await me(cookies.token);
           if (response.success) {
             recognition.lang = response.user.language.split(':')[1];
-            console.log(recognition.lang);
           }
           else{
             navigate('/');

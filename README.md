@@ -1,70 +1,59 @@
-# Deliverables
+# Verboverse
 
-### Project Title 
+## Project URL
 
-VerboVerse
+**Task:** Provide the link to your deployed application. Please make sure the link works.
 
-### Team Members
 
-##### Rubaiz Momin - 1006903479
-##### Cindy Ji - 1006718223
-##### Vanshika Virmani - 1006865251
+## Project Video URL 
 
-## Web Application Description
+**Task:** Provide the link to your youtube video. Please make sure the link works. 
 
-_VerboVerse_ is an interactive web application that allows people from different cultural backgrounds and languages to communicate with each other effortlessly. The app offers users the option to create and schedule meetings with video and audio calling option. What makes this app an even more immersive experience for the users is that it serves as the platform for performing real time translation of the different languages so that people can overcome their language barriers. 
 
-Overall, _VerboVerse_ is an innovative and user-friendly web app that offers an engaging experience for communicating more easily.
 
-### Key Features for Beta Version
+## Project Description
 
-- Home Page:
-    - Select their primary language (this will be the language that the audio in the meetings is translated to)
-    - Button for "Join Meeting" (this will act as a substitute for creating a room and joining it for the Final version)
-    - WebRTC for enabling two way communication channel, with both video and audio between two users
+**Task:** Provide a detailed description of your app
 
-- Translation Feature:
-    - Use Web Speech API for detecting audio input, and using Google Cloud Speech-to-Text to convert the audio into text
-    - Use Google Cloud Translation API to detect the language the text is in, and translate the text to the language of the other user’s choice
-    - We will display the translated text on the screen of the other user
+VerboVerse is an interactive web application that allows people from different cultural backgrounds and languages to communicate with each other effortlessly. The app offers users the option to create and schedule meetings with video and audio calling option. What makes this app an even more immersive experience for the users is that it serves as the platform for performing real time translation of the different languages so that people can overcome their language barriers.
 
-- Chat feature within the room:
-    - User can type in the language of their choice
-    - Receiver will receive the message in the receiver's language of choice
-    
-### Additional Features for Final Version
+Overall, VerboVerse is an innovative and user-friendly web app that offers an engaging experience for communicating more easily.
 
-- Login Page:
-    - Users can sign in/ create an account using Auth0
-    - Users can login to the website and access Home Page
+## Development
 
-- Home Page:
-    - User can see their user profile
-    - Option to schedule a new meeting or join meeting
-    - Feature for creating and joining the room for a meeting
-        - Enter email of the other user to invite them to the room
-        - Sendgrid to send email notification to the user with the meeting link/ room ID
-        - Click on the link in the email received
-        - Enter the Room ID once you click “Join meeting” on Home Page
+**Task:** Leaving deployment aside, explain how the app is built. Please describe the overall code design and be specific about the programming languages, framework, libraries and third-party api that you have used. 
 
-- Attaching documents in chat feature:
-    - Use Microsoft's Document Translation Client-library SDKs for translating the document sent by user A in one language, into user B's language
-    - Make sure the format of the document in preserved
+The app first uses WebRTC for meeting connection between 2 users. We, then use WebSpeechAPI to convert audio to text. As soon as we get the text, we use the Google Translation API to translate to the remote user's preferred language and send data using WebRTC data channels. The chatbox feature works in the similar way.
 
-### Technology Stack
+We used ReactJS for our framework as our application consisted of various components and we could leverage the component aspect of the ReactJS to build our application easily.
+We use the three layer framework architecture where the frontend communicates with the backend through API service to post and get various data and the backend communicates with the database to fulfil frontend's needs.
 
-- ReactJS for the Frontend
-- ExpressJS and NodeJS for Backend
-- MongoDB for Database
-- AWS Lightsail for deploying the Application
+Programming Language: HTML, CSS, Javascript
+CSS Libraries: Mui, chatscope
+Database: MongoDB and Firebase
+Third Party API: WebSpeech API (Audio-to-Text), Google Translation(For translation), SendGrid(Email Notification)
 
-### 5 Technical Challenges
+## Deployment
 
-- Managing asynchronous translation when two users are having a conversation
-    - Will research more into implementing a message queue system for asynchronous processing of translation requests.
-    - Can also use Redis, or a caching system for storing frequently accessed translations to improve efficiency and performance of the application 
-- Allowing users to join the same meeting using WebRTC
-    - Sendgrid be used for sending emails for invitations to the individual calls. The person who 'created' a room will be allowed to invite other users (who must sign up for the website) to collaborate on the same room. This invitation will involve sending a Room ID (or a secret key / link) to the user for authorization purposes.
-- Due to limitations on the usage of Google Translation API and Speech-To-Text API, we need to figure out when a user is speaking to prevent unnecessary and irrelevant API calls.
-- Ensuring the detection language is correct so that the entire process of gathering the audio to displaying the correct text translation.
-- Figuring out how to use the Microsoft library for translating the documents, while preserving the original format will be a challenge. 
+**Task:** Explain how you have deployed your application. 
+
+
+## Challenges
+
+**Task:** What is the top 3 most challenging things that you have learned/developed for you app? Please restrict your answer to only three items. 
+
+1. The working of the webSpeechAPI along with Google Translation was challenging as we had to reset translation at some point for   subtitles to be concise in size.
+2. The meeting connection was a challenge as Peer Connection is sensitive to breaking down
+3. Securing the endpoints from signed-out user was a challenge using jwt token.
+
+## Contributions
+
+**Task:** Describe the contribution of each team member to the project. Please provide the full name of each team member (but no student number). 
+
+Vanshika: Backend, Middleware, Backend API Service for Frontend, Login and Sign up, MemCache, CSS for the application, SendGrid, Account Profile, Backend Schema
+Cindy: WebSpeech API, Google Translation, Chat Box, CSS for the application, Data State for various functionalities (Audio, Video,  Transcription), Language Mapping, Account Profile
+Rubaiz: Meeting Connection, Google Translation, Data Channels, Chat Box, Video Preview Meeting, WebSpeechAPI, Error handling, Security for frontend endpoints, Backend CORS
+
+# One more thing? 
+
+**Task:** Any additional comment you want to share with the course staff? 
