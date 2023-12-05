@@ -53,6 +53,7 @@ Vanshika Virmani:
     - Did a refactoring of frontend code to redesign the UI for landing page and home page
     - Integrated user authentication on frontend
     - Application deployment using Google Cloud Platform and Vercel
+    
  Cindy Ji: 
     - WebSpeech API
     - Google Translation
@@ -61,6 +62,7 @@ Vanshika Virmani:
     - Data State for various functionalities (Audio, Video,  Transcription)
     - Language Mapping
     - Account Information
+
  Rubaiz Momin: 
     - Meeting Connection
     - Google Translation
