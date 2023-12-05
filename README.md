@@ -1,8 +1,8 @@
 # Verboverse
 
 ## Project Video URL 
-https://www.youtube.com/channel/UCImeVtxXlfZpA-G_bh6T_Sw
-
+[https://www.youtube.com/channel/UCImeVtxXlfZpA-G_bh6T_Sw
+](https://www.youtube.com/watch?v=X8-N_NplpGg&ab_channel=CindyJi)
 ## Project URL
 
 https://verboverse.vercel.app/
